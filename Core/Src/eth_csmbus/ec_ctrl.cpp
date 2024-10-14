@@ -11,11 +11,11 @@
 #include "ec_socket_base.hpp"
 #include "ec_backdoor.h"
 
-#define EC_CTRL_CB_MAX_COUNT (EC_APP_MAX_COUNT*2)
+#define EC_CTRL_CB_MAX_COUNT (ECTYPE_APP_MAX_COUNT*2)
 
 
 static uint32_t     g_safety_time;
-static ESTimer_t    g_ping_tim;
+static ECTimer_t    g_ping_tim;
 
 static uint32_t     g_reset_seed;
 
@@ -29,12 +29,12 @@ public:
 
     void callback(uint8_t reg_type, const void* data, size_t len)
     {
-        switch((ESCtrl_m2sRegType_t)reg_type)
+        switch((ECCtrl_m2sRegType_t)reg_type)
         {
-        case ESCtrl_m2sRegType_PING:{
-            if(len == sizeof(ESCtrl_s2mPingPacket_t))
+        case ECCtrl_m2sRegType_PING:{
+            if(len == sizeof(ECCtrl_s2mPingPacket_t))
             {
-                const ESCtrl_m2sPingPacket_t* ping = (const ESCtrl_m2sPingPacket_t*)data;
+                const ECCtrl_m2sPingPacket_t* ping = (const ECCtrl_m2sPingPacket_t*)data;
                 if(ping->is_safety_on != 1)
                 {
                     g_safety_time = HAL_GetTick() + 500;
@@ -44,17 +44,17 @@ public:
             }
             }break;
         
-        case ESCtrl_m2sRegType_RESET:{
-            if(len == sizeof(ESCtrl_m2sResetPacket_t))
+        case ECCtrl_m2sRegType_RESET:{
+            if(len == sizeof(ECCtrl_m2sResetPacket_t))
             {
-                const ESCtrl_m2sResetPacket_t* reset = (const ESCtrl_m2sResetPacket_t*)data;
+                const ECCtrl_m2sResetPacket_t* reset = (const ECCtrl_m2sResetPacket_t*)data;
                 if(g_reset_seed == 0)
                 {
                     g_reset_seed = reset->host_seed;
                 }else{
                     if(g_reset_seed != reset->host_seed)
                     {
-                        for(size_t i = 0; i < EC_APP_MAX_COUNT; i++)
+                        for(size_t i = 0; i < ECTYPE_APP_MAX_COUNT; i++)
                         {
                             if(g_callback[i].first)
                             {
@@ -73,7 +73,7 @@ public:
     }
 };
 
-void csmbus::ctrl::ctrl_bind(ESPort_t port, void* ctrl_iface)
+void csmbus::ctrl::ctrl_bind(ECPort_t port, void* ctrl_iface)
 {
     bool is_hit = false;
     for(size_t i = 0; i < EC_CTRL_CB_MAX_COUNT; i++)
@@ -96,10 +96,10 @@ void csmbus::ctrl::ctrl_bind(ESPort_t port, void* ctrl_iface)
 
 static CtrlSocket g_sock;
 
-void ESCtrl_init(void)
+void ECCtrl_init(void)
 {
     g_safety_time = 0;
-    ESTimer_timStart(&g_ping_tim);
+    ECTimer_timStart(&g_ping_tim);
     g_reset_seed = 0;
 
     for(size_t i = 0; i < EC_CTRL_CB_MAX_COUNT; i++)
@@ -111,7 +111,7 @@ void ESCtrl_init(void)
     g_sock.bind(ECTYPE_CTRL_S2M_PORT, ECTYPE_CTRL_M2S_PORT);
 }
 
-ESType_bool_t ESCtrl_isSafetyOn(void)
+ECType_bool_t ECCtrl_isSafetyOn(void)
 {
     if(HAL_GetTick() < g_safety_time)
     {
@@ -121,14 +121,14 @@ ESType_bool_t ESCtrl_isSafetyOn(void)
     }
 }
 
-void ESCtrl_process(void)
+void ECCtrl_process(void)
 {
-    if(200 <= ESTimer_getMs(g_ping_tim))
+    if(200 <= ECTimer_getMs(g_ping_tim))
 	{
-		ESTimer_timStart(&g_ping_tim);
+		ECTimer_timStart(&g_ping_tim);
 
-        ESCtrl_s2mPingPacket_t packet;
+        ECCtrl_s2mPingPacket_t packet;
         packet.is_active = 1;
-        g_sock.send(ESCtrl_s2mRegType_PING, &packet, sizeof(ESCtrl_s2mPingPacket_t));
+        g_sock.send(ECCtrl_s2mRegType_PING, &packet, sizeof(ECCtrl_s2mPingPacket_t));
 	}
 }

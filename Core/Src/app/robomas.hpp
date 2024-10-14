@@ -76,7 +76,7 @@ private:
     mot_t           _mot[6];
 
 public:
-    Robomas(ESPort_t port) : AppBase(port)
+    Robomas(ECPort_t port) : AppBase(port)
     {
     }
 
@@ -88,7 +88,7 @@ public:
         }
         _tim.reset();
 
-        this->setup_callbacks(ESEther_appid_ROBOMAS);
+        this->setup_callbacks(ECEther_appid_ROBOMAS);
     }
 
     void process(void)
@@ -107,7 +107,7 @@ public:
                 _mot[i].sens.is_received = 0;
 
             }
-            this->ether_send(ESReg_0, send_data, sizeof(Robomas_sensor_t) * 6);
+            this->ether_send(ECReg_0, send_data, sizeof(Robomas_sensor_t) * 6);
         }
 
 
@@ -118,9 +118,9 @@ public:
         }
     }
     
-    void eth_callback(ESReg_t reg, const void* data, size_t len)
+    void eth_callback(ECReg_t reg, const void* data, size_t len)
     {
-        if(ESReg_0 <= reg && len == sizeof(Robomas_power_t)*6)
+        if(ECReg_0 <= reg && len == sizeof(Robomas_power_t)*6)
         {
             for(size_t num = 0; num < 6; num++)
             {
@@ -132,9 +132,9 @@ public:
 
         }
 
-        if(ESReg_8 <= reg && reg <= ESReg_13 && len == sizeof(Robomas_param_t))
+        if(ECReg_8 <= reg && reg <= ECReg_13 && len == sizeof(Robomas_param_t))
         {
-            uint8_t num = reg - ESReg_8;
+            uint8_t num = reg - ECReg_8;
             _mot[num].param = *((const Robomas_param_t*)data);
         }
     }
@@ -189,7 +189,7 @@ public:
 
 private:
     void set_output(void){
-        ESType_bool_t is_safety_on = ESCtrl_isSafetyOn();
+        ECType_bool_t is_safety_on = ECCtrl_isSafetyOn();
 
         uint8_t status_map[6] = {0, 0, 0, 0, 0, 0};
         int32_t set_cur[6];

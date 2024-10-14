@@ -22,37 +22,37 @@
 typedef struct
 {
 	uint32_t  	check_pattern;
-}__attribute__((__packed__)) ESId_flash1_t;
+}__attribute__((__packed__)) ECId_flash1_t;
 
 typedef struct
 {
     uint16_t     id;
     uint16_t     checksum;
-}__attribute__((__packed__)) ESId_flash2_t;
+}__attribute__((__packed__)) ECId_flash2_t;
 
 // The type must be 16 bit or larger.
 typedef struct
 {
 	uint32_t     flash1;
     uint32_t     flash2;
-}__attribute__((__packed__)) ESId_flashData_t;
+}__attribute__((__packed__)) ECId_flashData_t;
 
 
-static ESId_t g_my_addr;
+static ECId_t g_my_addr;
 static uint32_t g_tenMsTimer;
 static uint16_t g_push_counter;
 
 static uint16_t     g_idLoopCount;
 
-static void ESId_flashWriteId(ESId_t id);
-static ESId_t ESId_flashReadId(void);
-static ESType_bool_t ESId_isPushingBtn(void);
+static void ECId_flashWriteId(ECId_t id);
+static ECId_t ECId_flashReadId(void);
+static ECType_bool_t ECId_isPushingBtn(void);
 
 
-void ESId_init(void)
+void ECId_init(void)
 {
-    g_my_addr = ESId_flashReadId();
-    if(g_my_addr == ESId_UNKNOWN)
+    g_my_addr = ECId_flashReadId();
+    if(g_my_addr == ECId_UNKNOWN)
     {
         for(uint8_t i = 0; i < 4; i++)
         {
@@ -66,17 +66,17 @@ void ESId_init(void)
             HAL_Delay(200);
         }
 
-        ESId_flashWriteId(EC_ID_FIXED_ADDR);
+        ECId_flashWriteId(EC_ID_FIXED_ADDR);
         NVIC_SystemReset();
     }
 }
 
-ESId_t ESId_getId(void)
+ECId_t ECId_getId(void)
 {
     return g_my_addr;
 }
 
-void ESId_process(ESType_bool_t is_safety_on)
+void ECId_process(ECType_bool_t is_safety_on)
 {
     register uint32_t now_tick = HAL_GetTick();
 
@@ -84,7 +84,7 @@ void ESId_process(ESType_bool_t is_safety_on)
     {
         g_tenMsTimer = now_tick + 10;
 
-        ESType_bool_t btn = ESId_isPushingBtn();
+        ECType_bool_t btn = ECId_isPushingBtn();
 
         if(is_safety_on)
         {
@@ -107,7 +107,7 @@ void ESId_process(ESType_bool_t is_safety_on)
                         HAL_GPIO_WritePin(LED_ETH_RX_GPIO_Port, LED_ETH_RX_Pin, GPIO_PIN_RESET);
                         while(HAL_GetTick() < end_tick)
                         {
-                            ESType_bool_t btn = ESId_isPushingBtn();
+                            ECType_bool_t btn = ECId_isPushingBtn();
 
                             if(btn && flg == 0)
                             {
@@ -139,9 +139,9 @@ void ESId_process(ESType_bool_t is_safety_on)
                         HAL_GPIO_WritePin(LED_ETH_TX_GPIO_Port, LED_ETH_TX_Pin, GPIO_PIN_RESET);
                         HAL_GPIO_WritePin(LED_ETH_RX_GPIO_Port, LED_ETH_RX_Pin, GPIO_PIN_RESET);
 
-                        if((id_num != 0) && (id_num <= ESId_UNKNOWN))
+                        if((id_num != 0) && (id_num <= ECId_UNKNOWN))
                         {
-                            ESId_flashWriteId(id_num - 1);
+                            ECId_flashWriteId(id_num - 1);
                             NVIC_SystemReset();
                         }
                     }
@@ -153,7 +153,7 @@ void ESId_process(ESType_bool_t is_safety_on)
             g_push_counter = 0;
         }
 
-        if(g_my_addr != ESId_UNKNOWN)
+        if(g_my_addr != ECId_UNKNOWN)
         {
             if(g_push_counter < 300)
             {
@@ -183,21 +183,21 @@ void ESId_process(ESType_bool_t is_safety_on)
 }
 
 
-static ESId_t ESId_flashReadId(void)
+static ECId_t ECId_flashReadId(void)
 {
-    const ESId_flashData_t* flash_data_p = (const ESId_flashData_t*)EC_ID_FLASH_START_ADDR;
-    ESId_flashData_t flash_data;
+    const ECId_flashData_t* flash_data_p = (const ECId_flashData_t*)EC_ID_FLASH_START_ADDR;
+    ECId_flashData_t flash_data;
 
-    memcpy(&flash_data, flash_data_p, sizeof(ESId_flashData_t));
+    memcpy(&flash_data, flash_data_p, sizeof(ECId_flashData_t));
 
-    ESId_flash1_t* flash1 = (ESId_flash1_t*)&flash_data.flash1;
-    ESId_flash2_t* flash2 = (ESId_flash2_t*)&flash_data.flash2;
+    ECId_flash1_t* flash1 = (ECId_flash1_t*)&flash_data.flash1;
+    ECId_flash2_t* flash2 = (ECId_flash2_t*)&flash_data.flash2;
 
     if(flash1->check_pattern == EC_ID_CHECK_PATTERN)
     {
         if(flash2->checksum == flash2->id)
         {
-            if(flash2->id < ESId_UNKNOWN)
+            if(flash2->id < ECId_UNKNOWN)
             {
                 return flash2->id;
             }
@@ -207,7 +207,7 @@ static ESId_t ESId_flashReadId(void)
                 HAL_GPIO_WritePin(LED_ETH_TX_GPIO_Port, LED_ETH_TX_Pin, GPIO_PIN_SET);
                 HAL_GPIO_WritePin(LED_ETH_RX_GPIO_Port, LED_ETH_RX_Pin, GPIO_PIN_SET);
                 HAL_Delay(1000);
-                return ESId_UNKNOWN;
+                return ECId_UNKNOWN;
             }
         }
         else
@@ -216,7 +216,7 @@ static ESId_t ESId_flashReadId(void)
             HAL_GPIO_WritePin(LED_ETH_TX_GPIO_Port, LED_ETH_TX_Pin, GPIO_PIN_SET);
             HAL_GPIO_WritePin(LED_ETH_RX_GPIO_Port, LED_ETH_RX_Pin, GPIO_PIN_SET);
             HAL_Delay(1000);
-            return ESId_UNKNOWN;
+            return ECId_UNKNOWN;
         }
     }
     else
@@ -225,11 +225,11 @@ static ESId_t ESId_flashReadId(void)
         HAL_GPIO_WritePin(LED_ETH_TX_GPIO_Port, LED_ETH_TX_Pin, GPIO_PIN_SET);
         HAL_GPIO_WritePin(LED_ETH_RX_GPIO_Port, LED_ETH_RX_Pin, GPIO_PIN_SET);
         HAL_Delay(1000);
-        return ESId_UNKNOWN;
+        return ECId_UNKNOWN;
     }
 }
 
-static void ESId_flashWriteId(ESId_t id)
+static void ECId_flashWriteId(ECId_t id)
 {
     if(HAL_FLASH_Unlock() != HAL_OK)
     {
@@ -257,9 +257,9 @@ static void ESId_flashWriteId(ESId_t id)
         return;
     }
 
-    ESId_flashData_t flash_data;
-    ESId_flash1_t* flash1 = (ESId_flash1_t*)&flash_data.flash1;
-    ESId_flash2_t* flash2 = (ESId_flash2_t*)&flash_data.flash2;
+    ECId_flashData_t flash_data;
+    ECId_flash1_t* flash1 = (ECId_flash1_t*)&flash_data.flash1;
+    ECId_flash2_t* flash2 = (ECId_flash2_t*)&flash_data.flash2;
     flash1->check_pattern = EC_ID_CHECK_PATTERN;
     flash2->id = id;
     flash2->checksum = flash2->id;
@@ -291,7 +291,7 @@ static void ESId_flashWriteId(ESId_t id)
 }
 
 
-static ESType_bool_t ESId_isPushingBtn(void)
+static ECType_bool_t ECId_isPushingBtn(void)
 {
     static uint8_t befor1_state = 0;
     static uint8_t befor2_state = 0;

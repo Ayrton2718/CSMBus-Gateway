@@ -21,18 +21,18 @@ typedef struct
 {
     volatile uint32_t ms;
     volatile uint16_t us;
-} ESTimer_t;
+} ECTimer_t;
 
-void ESTimer_init(void);
+void ECTimer_init(void);
 
-void ESTimer_timStart(ESTimer_t* tim);
+void ECTimer_timStart(ECTimer_t* tim);
 
-uint32_t ESTimer_getMs(const ESTimer_t tim);
-uint32_t ESTimer_getUs(const ESTimer_t tim);
+uint32_t ECTimer_getMs(const ECTimer_t tim);
+uint32_t ECTimer_getUs(const ECTimer_t tim);
 
-void ESTimer_delayUs(uint32_t us);
+void ECTimer_delayUs(uint32_t us);
 
-void __ESTimer_interrupt(TIM_HandleTypeDef* htim);
+void __ECTimer_interrupt(TIM_HandleTypeDef* htim);
 
 #ifdef __cplusplus
 }
@@ -45,7 +45,7 @@ void __ESTimer_interrupt(TIM_HandleTypeDef* htim);
 namespace csmbus::timer
 {
 
-void timer_bind(ESPort_t port, void* wall_tim);
+void timer_bind(ECPort_t port, void* wall_tim);
 
 class WallTimer
 {
@@ -53,7 +53,7 @@ public:
     WallTimer(void){
     }
 
-    void bind(ESPort_t port)
+    void bind(ECPort_t port)
     {
         csmbus::timer::timer_bind(port, this);
     }
@@ -64,14 +64,14 @@ public:
 class Timer
 {
 private:
-    ESTimer_t _tim;
+    ECTimer_t _tim;
 
 public:
     Timer(void){}
 
     void start(void)
     {
-        ESTimer_timStart(&_tim);
+        ECTimer_timStart(&_tim);
     }
 
     void reset(void)
@@ -81,12 +81,12 @@ public:
 
     uint32_t get_ms(void)
     {
-        return ESTimer_getMs(_tim);
+        return ECTimer_getMs(_tim);
     }
 
     uint32_t get_us(void)
     {
-        return ESTimer_getUs(_tim);
+        return ECTimer_getUs(_tim);
     }
 };
 

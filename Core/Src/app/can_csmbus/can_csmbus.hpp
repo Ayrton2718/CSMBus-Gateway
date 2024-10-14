@@ -45,11 +45,11 @@ private:
 
     timer::Timer           _tim;
 
-    ESType_bool_t   _befor_safety;
+    ECType_bool_t   _befor_safety;
     timer::Timer       _safety_tim;
 
 public:
-    CanSMBus(ESPort_t port) : AppBase(port)
+    CanSMBus(ECPort_t port) : AppBase(port)
     {
     }
 
@@ -60,12 +60,12 @@ public:
         _s2m_buff.count = 0;
         memset(_s2m_buff.packet, 0x00, sizeof(_s2m_buff.packet));
 
-        _befor_safety = ESCtrl_isSafetyOn();
+        _befor_safety = ECCtrl_isSafetyOn();
 
         _tim.start();
         _safety_tim.start();
 
-        this->setup_callbacks(ESEther_appid_CANSMBUS);
+        this->setup_callbacks(ECEther_appid_CANSMBUS);
     }
 
     
@@ -92,12 +92,12 @@ public:
 
             if(s2m.count != 0)
             {
-                this->ether_send(ESReg_0, &s2m, sizeof(CanSMBus_s2m_t));
+                this->ether_send(ECReg_0, &s2m, sizeof(CanSMBus_s2m_t));
             }
         }
 
 
-        ESType_bool_t is_safety_on = ESCtrl_isSafetyOn();
+        ECType_bool_t is_safety_on = ECCtrl_isSafetyOn();
         if(200 < _safety_tim.get_ms() || _befor_safety != is_safety_on)
         {
             _safety_tim.reset();
@@ -106,18 +106,18 @@ public:
             {
                 uint8_t buff[4];
                 buff[3] = 'U'; buff[2] = 'N'; buff[1] = 'S'; buff[0] = 'F'; 
-                this->can_send(CCTYPE_MAKE_M2S_CAN_ID(CSId_BRC, CSType_brcReg_Unsafe), buff, 4);
+                this->can_send(CCTYPE_MAKE_M2S_CAN_ID(CCId_BRC, CCType_brcReg_Unsafe), buff, 4);
             }else{
                 uint8_t buff[4];
-                this->can_send(CCTYPE_MAKE_M2S_CAN_ID(CSId_BRC, CSType_brcReg_Safety), buff, 0);
+                this->can_send(CCTYPE_MAKE_M2S_CAN_ID(CCId_BRC, CCType_brcReg_Safety), buff, 0);
             }
         }
         _befor_safety = is_safety_on;
     }
 
-    void eth_callback(ESReg_t reg, const void* data, size_t len)
+    void eth_callback(ECReg_t reg, const void* data, size_t len)
     {
-        if(reg == ESReg_0 && len == sizeof(CanSMBus_m2s_t))
+        if(reg == ECReg_0 && len == sizeof(CanSMBus_m2s_t))
         {
             const CanSMBus_m2s_t* m2s = (const CanSMBus_m2s_t*)data;
             for(size_t i = 0; i < m2s->count && i < 4; i++)
@@ -131,14 +131,14 @@ public:
     {
         if(CCTYPE_IS_S2M_PACKET(can_id))
         {
-            if(CSId_convertId2Num(CCTYPE_GET_PACKET_ID(can_id)) < CSId_convertId2Num(CSId_12))
+            if(CCId_convertId2Num(CCTYPE_GET_PACKET_ID(can_id)) < CCId_convertId2Num(CCId_12))
             {
                 ring_buff_t* rb = &_s2m_buff;
                 if(rb->count == CAN_CSMBUS_BUFFER_COUNT)
                 {
                     rb->rp++;
                     rb->count--;
-                    ESLed_err();
+                    ECLed_err();
                 }
 
                 rb->packet[rb->wp % CAN_CSMBUS_BUFFER_COUNT].can_id = can_id;
@@ -159,7 +159,7 @@ public:
     {
         uint8_t buff[4];
         buff[3] = 'R'; buff[2] = 'E'; buff[1] = 'S'; buff[0] = 'T';
-        this->can_send(CCTYPE_MAKE_M2S_CAN_ID(CSId_BRC, CSType_brcReg_Reset), buff, 4);
+        this->can_send(CCTYPE_MAKE_M2S_CAN_ID(CCId_BRC, CCType_brcReg_Reset), buff, 4);
         HAL_Delay(1);
 
         _tim.reset();

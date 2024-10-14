@@ -72,7 +72,7 @@ void MX_LWIP_Init(void)
   GATEWAY_ADDRESS[3] = 1;
 
 /* USER CODE BEGIN IP_ADDRESSES */
-IP_ADDRESS[3] += ESId_getId();
+IP_ADDRESS[3] += ECId_getId();
 /* USER CODE END IP_ADDRESSES */
 
   /* Initilialize the LwIP stack without RTOS */

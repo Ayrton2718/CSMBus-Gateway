@@ -7,9 +7,9 @@
 
 #include "ec_type.h"
 
-ESType_ackChecksum_t ESType_ackChecksumCalculator(const uint8_t* data, size_t data_len)
+ECType_ackChecksum_t ECType_ackChecksumCalculator(const uint8_t* data, size_t data_len)
 {
-    ESType_ackChecksum_t checksum = 0;
+    ECType_ackChecksum_t checksum = 0;
     for(size_t i = 0; i < data_len % 4; i++)
     {
         checksum += data[i];

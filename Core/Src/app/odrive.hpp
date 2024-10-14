@@ -159,7 +159,7 @@ private:
     mot_t           _mot[4];
 
 public:
-    Odrive(ESPort_t port, uint16_t base_id=3<<3) : AppBase(port), _base_id(base_id)
+    Odrive(ECPort_t port, uint16_t base_id=3<<3) : AppBase(port), _base_id(base_id)
     {
     }
 
@@ -174,7 +174,7 @@ public:
         _sens_tim.reset();
         _checker_tim.reset();
         _output_tim.reset();
-        this->setup_callbacks(ESEther_appid_ODRIVE);
+        this->setup_callbacks(ECEther_appid_ODRIVE);
     }
 
     void process(void)
@@ -192,7 +192,7 @@ public:
                 _mot[num].sens.encoder_estimate_received = 0;
                 _mot[num].sens.torques_received = 0;
             }
-            this->ether_send(ESReg_0, send_data, sizeof(Odrive_sensor_t) * 4);
+            this->ether_send(ECReg_0, send_data, sizeof(Odrive_sensor_t) * 4);
         }
 
         if(30 < _checker_tim.get_ms())
@@ -231,9 +231,9 @@ public:
         }
     }
 
-    void eth_callback(ESReg_t reg, const void* data, size_t len)
+    void eth_callback(ECReg_t reg, const void* data, size_t len)
     {
-        if(ESReg_0 <= reg && len == sizeof(Odrive_power_t)*4)
+        if(ECReg_0 <= reg && len == sizeof(Odrive_power_t)*4)
         {
             for(size_t num = 0; num < 4; num++)
             {
@@ -244,9 +244,9 @@ public:
             }
         }
 
-        if(ESReg_8 <= reg && reg <= ESReg_11 && len == sizeof(Odrive_param_t))
+        if(ECReg_8 <= reg && reg <= ECReg_11 && len == sizeof(Odrive_param_t))
         {
-            uint8_t num = reg - ESReg_8;
+            uint8_t num = reg - ECReg_8;
             _mot[num].param = *((const Odrive_param_t*)data);
         }
     }
@@ -360,7 +360,7 @@ private:
         mot_t* mot = &_mot[num];
 
         Odrive_mode_t mode = (Odrive_mode_t)mot->power.mode;
-        if(ESCtrl_isSafetyOn())
+        if(ECCtrl_isSafetyOn())
         {
             mode = Odrive_mode_DISABLE;
         }

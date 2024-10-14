@@ -60,7 +60,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-  __ESTimer_interrupt(htim);
+  __ECTimer_interrupt(htim);
 }
 /* USER CODE END 0 */
 
@@ -88,7 +88,7 @@ int main(void)
 
   /* USER CODE BEGIN SysInit */
   MX_GPIO_Init();
-  ESId_init();
+  ECId_init();
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -98,11 +98,11 @@ int main(void)
   MX_CAN2_Init();
   MX_TIM7_Init();
   /* USER CODE BEGIN 2 */
-  ESLed_init();
-  ESTimer_init();
-  ESCan_init();
-  ESBackdoor_init();
-  ESCtrl_init();
+  ECLed_init();
+  ECTimer_init();
+  ECCan_init();
+  ECBackdoor_init();
+  ECCtrl_init();
   /* USER CODE END 2 */
 
   /* Infinite loop */

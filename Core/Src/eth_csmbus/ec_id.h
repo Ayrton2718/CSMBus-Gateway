@@ -14,13 +14,13 @@
 extern "C" {
 #endif
 
-#define EC_ID_FIXED_ADDR (ESId_1)
+#define EC_ID_FIXED_ADDR (ECId_1)
 
-void ESId_init(void);
+void ECId_init(void);
 
-ESId_t ESId_getId(void);
+ECId_t ECId_getId(void);
 
-void ESId_process(ESType_bool_t is_safety_on);
+void ECId_process(ECType_bool_t is_safety_on);
 
 #ifdef __cplusplus
 }

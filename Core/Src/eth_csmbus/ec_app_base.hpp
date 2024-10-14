@@ -19,21 +19,21 @@ namespace csmbus
 class AppBase : protected socket::AppSocket, protected can::CanSocket, protected timer::WallTimer, protected ctrl::CtrlInterface
 {
 private:
-    ESPort_t _port;
+    ECPort_t _port;
 
 public:
     virtual void init(void) = 0;
     virtual void process(void) = 0;
 
 protected:
-    AppBase(ESPort_t can_port) : socket::AppSocket(), can::CanSocket(), timer::WallTimer(), ctrl::CtrlInterface()
+    AppBase(ECPort_t can_port) : socket::AppSocket(), can::CanSocket(), timer::WallTimer(), ctrl::CtrlInterface()
     {
         _port = can_port;
     }
 
-    void setup_callbacks(ESEther_appid_t appid)
+    void setup_callbacks(ECEther_appid_t appid)
     {
-        ESBackdoor_setApp(_port, appid);
+        ECBackdoor_setApp(_port, appid);
 
         socket::AppSocket::init(_port, appid);
         can::CanSocket::bind(_port);

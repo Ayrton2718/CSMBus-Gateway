@@ -16,13 +16,13 @@
 extern "C" {
 #endif
 
-void ESBackdoor_init(void);
+void ECBackdoor_init(void);
 
-void ESBackdoor_setApp(ESPort_t port, ESEther_appid_t appid);
+void ECBackdoor_setApp(ECPort_t port, ECEther_appid_t appid);
 
-void ESBackdoor_enablePanel(ESPort_t port, CSId_t id);
+void ECBackdoor_enablePanel(ECPort_t port, CCId_t id);
 
-void ESBackdoor_process(ESType_bool_t is_safety_on);
+void ECBackdoor_process(ECType_bool_t is_safety_on);
 
 #ifdef __cplusplus
 }
@@ -33,21 +33,21 @@ void ESBackdoor_process(ESType_bool_t is_safety_on);
 #include <functional>
 #include <string>
 
-void ESBackdoor_log(ESBackdoor_msgLvl_t lvl, ESBackdoor_msgType_t type, std::string msg);
+void ECBackdoor_log(ECBackdoor_msgLvl_t lvl, ECBackdoor_msgType_t type, std::string msg);
 
-void ESBackdoor_ethStatusCode(ESBackdoor_eth_status_t err_code);
-void ESBackdoor_canStatusCode(ESPort_t port, ESBackdoor_can_status_t err_code);
+void ECBackdoor_ethStatusCode(ECBackdoor_eth_status_t err_code);
+void ECBackdoor_canStatusCode(ECPort_t port, ECBackdoor_can_status_t err_code);
 
-#define EC_ETH_RESET()          ESBackdoor_ethStatusCode(ESBackdoor_eth_status_RESETING)
+#define EC_ETH_RESET()          ECBackdoor_ethStatusCode(ECBackdoor_eth_status_RESETING)
 
-#define EC_CAN_OVERFLOW(port)   ESBackdoor_canStatusCode(port, ESBackdoor_can_status_OVERFLOWED)
-#define EC_CAN_SEND_FAIL(port)   ESBackdoor_canStatusCode(port, ESBackdoor_can_status_SEND_FAIL)
+#define EC_CAN_OVERFLOW(port)   ECBackdoor_canStatusCode(port, ECBackdoor_can_status_OVERFLOWED)
+#define EC_CAN_SEND_FAIL(port)   ECBackdoor_canStatusCode(port, ECBackdoor_can_status_SEND_FAIL)
 
-#define EC_INFO(port, msg)   ESBackdoor_log(ESBackdoor_msgLvl_INFO, (ESBackdoor_msgType_t)port, msg)
-#define EC_ERR(port, msg)   ESBackdoor_log(ESBackdoor_msgLvl_ERR, (ESBackdoor_msgType_t)port, msg)
+#define EC_INFO(port, msg)   ECBackdoor_log(ECBackdoor_msgLvl_INFO, (ECBackdoor_msgType_t)port, msg)
+#define EC_ERR(port, msg)   ECBackdoor_log(ECBackdoor_msgLvl_ERR, (ECBackdoor_msgType_t)port, msg)
 
-#define EC_SYS_INFO(msg)   ESBackdoor_log(ESBackdoor_msgLvl_INFO, ESBackdoor_msgType_SYSTEM, msg)
-#define EC_SYS_ERR(msg)   ESBackdoor_log(ESBackdoor_msgLvl_ERR, ESBackdoor_msgType_SYSTEM, msg)
+#define EC_SYS_INFO(msg)   ECBackdoor_log(ECBackdoor_msgLvl_INFO, ECBackdoor_msgType_SYSTEM, msg)
+#define EC_SYS_ERR(msg)   ECBackdoor_log(ECBackdoor_msgLvl_ERR, ECBackdoor_msgType_SYSTEM, msg)
 
 #endif /*__cplusplus*/
 

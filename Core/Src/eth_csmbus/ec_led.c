@@ -25,7 +25,7 @@ static uint8_t      g_errFlgCount;
 static uint8_t      g_can1StopCount;
 static uint8_t      g_can2StopCount;
 
-void ESLed_init(void)
+void ECLed_init(void)
 {
     g_isEnableBlink = 1;
     g_tenMsTimer = 0;
@@ -50,40 +50,40 @@ void ESLed_init(void)
     HAL_GPIO_WritePin(LED_ID_GPIO_Port, LED_ID_Pin, GPIO_PIN_RESET);
 }
 
-void ESLed_ethTx(void)
+void ECLed_ethTx(void)
 {
 	g_txStopCount = 1;
 }
 
-void ESLed_ethRx(void)
+void ECLed_ethRx(void)
 {
 	g_rxStopCount = 2;
 }
 
-void ESLed_err(void)
+void ECLed_err(void)
 {
     HAL_GPIO_WritePin(LED_ETH_ERR_GPIO_Port, LED_ETH_ERR_Pin, GPIO_PIN_SET);
 	g_errStopCount = 50;
 }
 
-void ESLed_bus_err(void)
+void ECLed_bus_err(void)
 {
     HAL_GPIO_WritePin(LED_ETH_ERR_GPIO_Port, LED_ETH_ERR_Pin, GPIO_PIN_SET);
 	g_errStopCount = 255;
 }
 
-void ESLed_canRx1(void)
+void ECLed_canRx1(void)
 {
     g_can1StopCount = 1;
 }
 
-void ESLed_canRx2(void)
+void ECLed_canRx2(void)
 {
     g_can2StopCount = 1;
 }
 
 
-void ESLed_hungUp(void)
+void ECLed_hungUp(void)
 {
 	g_isEnableBlink = 0;
 
@@ -93,7 +93,7 @@ void ESLed_hungUp(void)
 }
 
 
-void ESLed_process(ESType_bool_t is_safety_on)
+void ECLed_process(ECType_bool_t is_safety_on)
 {
     register uint32_t now_tick = HAL_GetTick();
 

@@ -21,21 +21,21 @@ typedef struct
     volatile uint8_t count;
     std::array<std::pair<CAN_TxHeaderTypeDef, uint8_t[8]>, EC_CAN_BUFF_MAX_COUNT> buff;
 
-    std::array<std::pair<bool, csmbus::can::CanSocket*>, EC_APP_MAX_COUNT> callback;
-} ESCan_port_t;
+    std::array<std::pair<bool, csmbus::can::CanSocket*>, ECTYPE_APP_MAX_COUNT> callback;
+} ECCan_port_t;
 
-static ESCan_port_t g_obj[2];
+static ECCan_port_t g_obj[2];
 
-static void ESCan_filterSet(ESPort_t port);
+static void ECCan_filterSet(ECPort_t port);
 
 
-ESType_bool_t ESCan_dummyCallback(uint16_t can_id, const uint8_t* data, size_t len)
+ECType_bool_t ECCan_dummyCallback(uint16_t can_id, const uint8_t* data, size_t len)
 {
     return ECTYPE_FALSE;
 }
 
 
-void ESCan_init(void)
+void ECCan_init(void)
 {
 #ifndef EC_CAN_SWAP
     g_obj[0].hcan = &hcan1;
@@ -65,7 +65,7 @@ void ESCan_init(void)
             memset(g_obj[port_i].buff[i].second, 0x00, sizeof(uint8_t[8]));
         }
 
-        for(size_t i = 0; i < EC_APP_MAX_COUNT; i++)
+        for(size_t i = 0; i < ECTYPE_APP_MAX_COUNT; i++)
         {
             g_obj[port_i].callback[i].first = false;
             g_obj[port_i].callback[i].second = nullptr;
@@ -73,14 +73,14 @@ void ESCan_init(void)
     }
 
 #ifdef EC_CAN_ENABLE_RX1_BIND
-    ESCan_filterSet(ESPort_1);
+    ECCan_filterSet(ECPort_1);
 #endif /*EC_CAN_ENABLE_RX2_BIND*/
 #ifdef EC_CAN_ENABLE_RX2_BIND
-    ESCan_filterSet(ESPort_2);
+    ECCan_filterSet(ECPort_2);
 #endif /*EC_CAN_ENABLE_RX1_BIND*/
 }
 
-void ESCan_process(void)
+void ECCan_process(void)
 {
     for(size_t port_i = 0; port_i < 2; port_i++)
     {
@@ -92,7 +92,7 @@ void ESCan_process(void)
             HAL_StatusTypeDef result = HAL_CAN_AddTxMessage(g_obj[port_i].hcan, &packet.first, packet.second, &TxMailbox);
             if(result != HAL_OK)
             {
-                EC_ERR((ESPort_t)port_i, "Can resend failed by " + std::to_string(result));
+                EC_ERR((ECPort_t)port_i, "Can resend failed by " + std::to_string(result));
                 break;
             }
             g_obj[port_i].rp++;
@@ -102,25 +102,25 @@ void ESCan_process(void)
 
     if(HAL_CAN_GetError(&hcan1) != HAL_CAN_ERROR_NONE)
     {
-        EC_ERR((ESPort_t)0, "Can getErr 0d" + std::to_string(HAL_CAN_GetError(&hcan1)));
+        EC_ERR((ECPort_t)0, "Can getErr 0d" + std::to_string(HAL_CAN_GetError(&hcan1)));
         HAL_CAN_ResetError(&hcan1);
-        ESLed_bus_err();
+        ECLed_bus_err();
     }
 
     if(HAL_CAN_GetError(&hcan2) != HAL_CAN_ERROR_NONE)
     {
-        EC_ERR((ESPort_t)1, "Can getErr 0d" + std::to_string(HAL_CAN_GetError(&hcan2)));
+        EC_ERR((ECPort_t)1, "Can getErr 0d" + std::to_string(HAL_CAN_GetError(&hcan2)));
         HAL_CAN_ResetError(&hcan2);
-        ESLed_bus_err();
+        ECLed_bus_err();
     }
 }
 
-size_t csmbus::can::can_bind(ESPort_t port, void* socket)
+size_t csmbus::can::can_bind(ECPort_t port, void* socket)
 {
-    size_t array_index = EC_APP_MAX_COUNT - 1;
+    size_t array_index = ECTYPE_APP_MAX_COUNT - 1;
     bool is_hit = false;
 
-    for(size_t i = 0; i < EC_APP_MAX_COUNT; i++)
+    for(size_t i = 0; i < ECTYPE_APP_MAX_COUNT; i++)
     {
         if(g_obj[port].callback[i].second == nullptr)
         {
@@ -139,7 +139,7 @@ size_t csmbus::can::can_bind(ESPort_t port, void* socket)
     return array_index;
 }
 
-void csmbus::can::can_send(ESPort_t port, uint16_t can_id, const uint8_t* data, size_t len)
+void csmbus::can::can_send(ECPort_t port, uint16_t can_id, const uint8_t* data, size_t len)
 {
     CAN_TxHeaderTypeDef header;
     uint32_t TxMailbox;
@@ -173,9 +173,9 @@ void csmbus::can::can_send(ESPort_t port, uint16_t can_id, const uint8_t* data, 
     }
 }
 
-void csmbus::can::set_enable(ESPort_t port, size_t array_index, bool is_enable)
+void csmbus::can::set_enable(ECPort_t port, size_t array_index, bool is_enable)
 {
-    if(array_index < EC_APP_MAX_COUNT)
+    if(array_index < ECTYPE_APP_MAX_COUNT)
     {
         g_obj[port].callback[array_index].first = is_enable;
     }
@@ -186,9 +186,9 @@ void csmbus::can::set_enable(ESPort_t port, size_t array_index, bool is_enable)
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
 #ifndef EC_CAN_SWAP
-    const ESPort_t port = ESPort_1;
+    const ECPort_t port = ECPort_1;
 #else /*EC_CAN_SWAP*/
-    const ESPort_t port = ESPort_2;
+    const ECPort_t port = ECPort_2;
 #endif /*EC_CAN_SWAP*/
 
     CAN_RxHeaderTypeDef RxHeader;
@@ -196,11 +196,11 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 
     if((HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO0, &RxHeader, RxData) == HAL_OK))
     {
-        for(size_t i = 0; i < EC_APP_MAX_COUNT; i++)
+        for(size_t i = 0; i < ECTYPE_APP_MAX_COUNT; i++)
         {
             if(g_obj[port].callback[i].first && g_obj[port].callback[i].second->can_callback(RxHeader.StdId, RxData, RxHeader.DLC))
             {
-                ESLed_canRx1();
+                ECLed_canRx1();
             }
         }
     }
@@ -211,9 +211,9 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
 #ifndef EC_CAN_SWAP
-    const ESPort_t port = ESPort_2;
+    const ECPort_t port = ECPort_2;
 #else /*EC_CAN_SWAP*/
-    const ESPort_t port = ESPort_1;
+    const ECPort_t port = ECPort_1;
 #endif /*EC_CAN_SWAP*/
 
     CAN_RxHeaderTypeDef RxHeader;
@@ -221,18 +221,18 @@ void HAL_CAN_RxFifo1MsgPendingCallback(CAN_HandleTypeDef *hcan)
 
     if((HAL_CAN_GetRxMessage(hcan, CAN_RX_FIFO1, &RxHeader, RxData) == HAL_OK))
     {
-        for(size_t i = 0; i < EC_APP_MAX_COUNT; i++)
+        for(size_t i = 0; i < ECTYPE_APP_MAX_COUNT; i++)
         {
             if(g_obj[port].callback[i].first && g_obj[port].callback[i].second->can_callback(RxHeader.StdId, RxData, RxHeader.DLC))
             {
-                ESLed_canRx2();
+                ECLed_canRx2();
             }
         }
     }
 }
 #endif /*EC_CAN_ENABLE_RX2_BIND*/
 
-static void ESCan_filterSet(ESPort_t port)
+static void ECCan_filterSet(ECPort_t port)
 {
     CAN_HandleTypeDef* hcan;
     uint32_t FilterFIFOAssignment;
@@ -265,16 +265,16 @@ static void ESCan_filterSet(ESPort_t port)
 	filter.FilterActivation     = ENABLE;                      // フィルター無効／有効
 	if (HAL_CAN_ConfigFilter(hcan, &filter) != HAL_OK)
 	{
-        ESLed_hungUp();
+        ECLed_hungUp();
 	}
 
     if(HAL_CAN_ActivateNotification(hcan, ActiveITs) != HAL_OK)
 	{
-        ESLed_hungUp();
+        ECLed_hungUp();
 	}
 
     if(HAL_CAN_Start(hcan) != HAL_OK)
     {
-        ESLed_hungUp();
+        ECLed_hungUp();
     }
 }

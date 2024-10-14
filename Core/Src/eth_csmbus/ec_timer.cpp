@@ -10,15 +10,15 @@
 #include "ec_backdoor.h"
 #include "tim.h"
 
-#define EC_TIMER_CB_MAX_COUNT (EC_APP_MAX_COUNT*2)
+#define EC_TIMER_CB_MAX_COUNT (ECTYPE_APP_MAX_COUNT*2)
 
 volatile static uint32_t g_ms_count;
 
 static std::array<std::pair<bool, csmbus::timer::WallTimer*>, EC_TIMER_CB_MAX_COUNT> g_callback;
 
-void ESTimer_dummyCallback(void){}
+void ECTimer_dummyCallback(void){}
 
-void ESTimer_init(void)
+void ECTimer_init(void)
 {
     g_ms_count = 0;
 
@@ -36,7 +36,7 @@ void ESTimer_init(void)
 namespace csmbus::timer
 {
 
-void timer_bind(ESPort_t port, void* wall_tim)
+void timer_bind(ECPort_t port, void* wall_tim)
 {
     bool is_hit = false;
     for(size_t i = 0; i < EC_TIMER_CB_MAX_COUNT; i++)
@@ -59,7 +59,7 @@ void timer_bind(ESPort_t port, void* wall_tim)
 }
 
 
-void ESTimer_timStart(ESTimer_t* tim)
+void ECTimer_timStart(ECTimer_t* tim)
 {
     uint16_t now_us = __HAL_TIM_GET_COUNTER(EC_TIMER_USE_HTIM);
 	uint32_t now_ms = g_ms_count;
@@ -68,7 +68,7 @@ void ESTimer_timStart(ESTimer_t* tim)
     tim->us = now_us;
 }
 
-uint32_t ESTimer_getMs(const ESTimer_t tim)
+uint32_t ECTimer_getMs(const ECTimer_t tim)
 {
     uint16_t now_us = __HAL_TIM_GET_COUNTER(EC_TIMER_USE_HTIM);
 	uint32_t now_ms = g_ms_count;
@@ -85,7 +85,7 @@ uint32_t ESTimer_getMs(const ESTimer_t tim)
     return ms;
 }
 
-uint32_t ESTimer_getUs(const ESTimer_t tim)
+uint32_t ECTimer_getUs(const ECTimer_t tim)
 {
     uint16_t now_us = __HAL_TIM_GET_COUNTER(EC_TIMER_USE_HTIM);
     uint32_t now_ms = g_ms_count;
@@ -102,13 +102,13 @@ uint32_t ESTimer_getUs(const ESTimer_t tim)
     return us;
 }
 
-void ESTimer_delayUs(uint32_t us)
+void ECTimer_delayUs(uint32_t us)
 {
-    ESTimer_t start;
-    ESTimer_timStart(&start);
+    ECTimer_t start;
+    ECTimer_timStart(&start);
     while(1)
     {
-        if(us <= ESTimer_getUs(start))
+        if(us <= ECTimer_getUs(start))
         {
             break;
         }
@@ -121,7 +121,7 @@ void ESTimer_delayUs(uint32_t us)
 }
 
 
-void __ESTimer_interrupt(TIM_HandleTypeDef* htim)
+void __ECTimer_interrupt(TIM_HandleTypeDef* htim)
 {
     if(htim->Instance == EC_TIMER_USE_HTIM->Instance)
     {

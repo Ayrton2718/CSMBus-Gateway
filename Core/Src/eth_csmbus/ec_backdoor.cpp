@@ -16,19 +16,19 @@
 
 typedef struct{    
     volatile uint8_t            ping_wp;
-    ESBackdoor_s2mPingPacket_t  ping_packet[2];
-    ESTimer_t                   ping_tim;
+    ECBackdoor_s2mPingPacket_t  ping_packet[2];
+    ECTimer_t                   ping_tim;
 
-    ESTimer_t    diagnostic_tim;
+    ECTimer_t    diagnostic_tim;
 
-    ESTimer_t           log_tim;
+    ECTimer_t           log_tim;
     uint8_t             log_wp;
     volatile uint8_t    log_rp;
     volatile uint8_t    log_count;
-    ESBackdoor_s2mMsgPacket_t   log_buff[EC_MSG_BUFF_COUNT];
-} ESBackdoor_obj_t;
+    ECBackdoor_s2mMsgPacket_t   log_buff[EC_MSG_BUFF_COUNT];
+} ECBackdoor_obj_t;
 
-static ESBackdoor_obj_t 	g_obj;
+static ECBackdoor_obj_t 	g_obj;
 
 
 class BackdoorCan : public csmbus::can::CanSocket
@@ -39,14 +39,14 @@ private:
     uint16_t _panel_send_id = 0x000;
     
     bool _panel_active = false;
-    uint8_t _panel_packet[sizeof(ESBackdoor_s2mPingPacket_t::panel_packet)];
+    uint8_t _panel_packet[sizeof(ECBackdoor_s2mPingPacket_t::panel_packet)];
 
 public:
     BackdoorCan() : csmbus::can::CanSocket(){}
 
-    void enable_panel(CSId_t id){
-        _panel_recv_id = CCTYPE_MAKE_S2M_CAN_ID(id, CCTYPE_MAKE_USER_REG(CCTYPE_MAKE_WRITE_REG(CSReg_0)));
-        _panel_send_id = CCTYPE_MAKE_M2S_CAN_ID(id, CCTYPE_MAKE_USER_REG(CCTYPE_MAKE_WRITE_REG(CSReg_0)));
+    void enable_panel(CCId_t id){
+        _panel_recv_id = CCTYPE_MAKE_S2M_CAN_ID(id, CCTYPE_MAKE_USER_REG(CCTYPE_MAKE_WRITE_REG(CCReg_0)));
+        _panel_send_id = CCTYPE_MAKE_M2S_CAN_ID(id, CCTYPE_MAKE_USER_REG(CCTYPE_MAKE_WRITE_REG(CCReg_0)));
         _is_enable_panel = true;
     }
 
@@ -57,8 +57,8 @@ public:
         return is_active;
     }
 
-    void send_panel(const ESBackdoor_m2sPanelPacket_t* packet){
-        this->can_send(_panel_send_id, (const uint8_t*)packet, sizeof(ESBackdoor_m2sPanelPacket_t));
+    void send_panel(const ECBackdoor_m2sPanelPacket_t* packet){
+        this->can_send(_panel_send_id, (const uint8_t*)packet, sizeof(ECBackdoor_m2sPanelPacket_t));
     }
 
     bool is_enable_panel(void){
@@ -94,14 +94,14 @@ public:
 
     void callback(uint8_t reg_type, const void* data, size_t len)
     {
-        switch((ESBackdoor_m2sRegType_t)reg_type)
+        switch((ECBackdoor_m2sRegType_t)reg_type)
         {
-        case ESBackdoor_m2sRegType_PANEL:
-            if(_is_enable_panel && len == sizeof(ESBackdoor_m2sPanelPacket_t))
-                _can_sock->send_panel((const ESBackdoor_m2sPanelPacket_t*)data);
+        case ECBackdoor_m2sRegType_PANEL:
+            if(_is_enable_panel && len == sizeof(ECBackdoor_m2sPanelPacket_t))
+                _can_sock->send_panel((const ECBackdoor_m2sPanelPacket_t*)data);
             break;
 
-        case ESBackdoor_m2sRegType_DIAGNOSTICS:
+        case ECBackdoor_m2sRegType_DIAGNOSTICS:
             break;
         
         default:
@@ -114,15 +114,15 @@ public:
 static BackdoorEther    g_ether_sock;
 static BackdoorCan      g_can_sock[2];
 
-void ESBackdoor_init(void)
+void ECBackdoor_init(void)
 {
     g_obj.ping_wp = 0;
     memset(g_obj.ping_packet, 0x00, sizeof(g_obj.ping_packet));
-    ESTimer_timStart(&g_obj.ping_tim);
+    ECTimer_timStart(&g_obj.ping_tim);
 
-    ESTimer_timStart(&g_obj.diagnostic_tim);
+    ECTimer_timStart(&g_obj.diagnostic_tim);
 
-    ESTimer_timStart(&g_obj.log_tim);
+    ECTimer_timStart(&g_obj.log_tim);
     g_obj.log_wp = 0;
     g_obj.log_rp = 0;
     g_obj.log_count = 0;
@@ -130,32 +130,32 @@ void ESBackdoor_init(void)
 
     g_ether_sock.bind(ECTYPE_BACKDOOR_S2M_PORT, ECTYPE_BACKDOOR_M2S_PORT);
 
-    g_can_sock[0].bind(ESPort_1);
+    g_can_sock[0].bind(ECPort_1);
     g_can_sock[0].disable();
-    g_can_sock[1].bind(ESPort_2);
+    g_can_sock[1].bind(ECPort_2);
     g_can_sock[1].disable();
 }
 
-void ESBackdoor_setApp(ESPort_t port, ESEther_appid_t appid)
+void ECBackdoor_setApp(ECPort_t port, ECEther_appid_t appid)
 {
     g_obj.ping_packet[0].port_apps[port] |= (0x01 << appid);
     g_obj.ping_packet[1].port_apps[port] |= (0x01 << appid);
 }
 
-void ESBackdoor_enablePanel(ESPort_t port, CSId_t id)
+void ECBackdoor_enablePanel(ECPort_t port, CCId_t id)
 {
     g_can_sock[port].enable_panel(id);
     g_can_sock[port].enable();
     g_ether_sock.set_panel(&g_can_sock[port]);
 }
 
-void ESBackdoor_process(ESType_bool_t is_safety_on)
+void ECBackdoor_process(ECType_bool_t is_safety_on)
 {
-    if(20 <= ESTimer_getMs(g_obj.ping_tim))
+    if(20 <= ECTimer_getMs(g_obj.ping_tim))
 	{
-		ESTimer_timStart(&g_obj.ping_tim);
+		ECTimer_timStart(&g_obj.ping_tim);
 
-        ESBackdoor_s2mPingPacket_t* packet = &g_obj.ping_packet[g_obj.ping_wp];
+        ECBackdoor_s2mPingPacket_t* packet = &g_obj.ping_packet[g_obj.ping_wp];
         g_obj.ping_wp = (g_obj.ping_wp + 1) % 2;
 
         if(g_can_sock[0].is_enable_panel()){
@@ -165,19 +165,19 @@ void ESBackdoor_process(ESType_bool_t is_safety_on)
         }else{
             packet->panel_active = 0;
         }
-        g_ether_sock.send(ESBackdoor_s2mRegType_PING, packet, sizeof(ESBackdoor_s2mPingPacket_t));
+        g_ether_sock.send(ECBackdoor_s2mRegType_PING, packet, sizeof(ECBackdoor_s2mPingPacket_t));
         packet->eth_status = 0;
         packet->can_status[0] = 0;
         packet->can_status[1] = 0;
 	}
 
-    if(5 <= ESTimer_getMs(g_obj.log_tim))
+    if(5 <= ECTimer_getMs(g_obj.log_tim))
     {
-        ESTimer_timStart(&g_obj.log_tim);
+        ECTimer_timStart(&g_obj.log_tim);
         if(0 < g_obj.log_count)
         {
-            ESBackdoor_s2mMsgPacket_t* packet = &g_obj.log_buff[g_obj.log_rp % EC_MSG_BUFF_COUNT];
-            g_ether_sock.send(ESBackdoor_s2mRegType_MSG, packet, sizeof(ESBackdoor_s2mMsgPacket_t));
+            ECBackdoor_s2mMsgPacket_t* packet = &g_obj.log_buff[g_obj.log_rp % EC_MSG_BUFF_COUNT];
+            g_ether_sock.send(ECBackdoor_s2mRegType_MSG, packet, sizeof(ECBackdoor_s2mMsgPacket_t));
             g_obj.log_rp++;
             g_obj.log_count--;
         }
@@ -185,7 +185,7 @@ void ESBackdoor_process(ESType_bool_t is_safety_on)
 }
 
 
-void ESBackdoor_log(ESBackdoor_msgLvl_t lvl, ESBackdoor_msgType_t type, std::string msg)
+void ECBackdoor_log(ECBackdoor_msgLvl_t lvl, ECBackdoor_msgType_t type, std::string msg)
 {
     if(ECTYPE_MSG_MAX_LEN < msg.size())
     {
@@ -198,7 +198,7 @@ void ESBackdoor_log(ESBackdoor_msgLvl_t lvl, ESBackdoor_msgType_t type, std::str
         g_obj.log_count--;
     }
 
-    ESBackdoor_s2mMsgPacket_t* packet = &g_obj.log_buff[g_obj.log_wp % EC_MSG_BUFF_COUNT];
+    ECBackdoor_s2mMsgPacket_t* packet = &g_obj.log_buff[g_obj.log_wp % EC_MSG_BUFF_COUNT];
     packet->lvl = lvl;
     packet->type = type;
     memcpy(packet->msg, msg.data(), msg.size());
@@ -208,14 +208,14 @@ void ESBackdoor_log(ESBackdoor_msgLvl_t lvl, ESBackdoor_msgType_t type, std::str
     g_obj.log_count++;
 }
 
-void ESBackdoor_ethStatusCode(ESBackdoor_eth_status_t err_code)
+void ECBackdoor_ethStatusCode(ECBackdoor_eth_status_t err_code)
 {
     g_obj.ping_packet[g_obj.ping_wp].eth_status |= err_code;
-    ESLed_err();
+    ECLed_err();
 }
 
-void ESBackdoor_canStatusCode(ESPort_t port, ESBackdoor_can_status_t err_code)
+void ECBackdoor_canStatusCode(ECPort_t port, ECBackdoor_can_status_t err_code)
 {
     g_obj.ping_packet[g_obj.ping_wp].can_status[port] |= err_code;
-    ESLed_bus_err();
+    ECLed_bus_err();
 }

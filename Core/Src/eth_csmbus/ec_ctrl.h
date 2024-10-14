@@ -14,11 +14,11 @@
 extern "C" {
 #endif
 
-void ESCtrl_init(void);
+void ECCtrl_init(void);
 
-ESType_bool_t ESCtrl_isSafetyOn(void);
+ECType_bool_t ECCtrl_isSafetyOn(void);
 
-void ESCtrl_process(void);
+void ECCtrl_process(void);
 
 #ifdef __cplusplus
 }
@@ -30,7 +30,7 @@ void ESCtrl_process(void);
 namespace csmbus::ctrl
 {
 
-void ctrl_bind(ESPort_t port, void* ctrl_iface);
+void ctrl_bind(ECPort_t port, void* ctrl_iface);
 
 class CtrlInterface
 {
@@ -38,7 +38,7 @@ public:
     CtrlInterface(void){
     }
 
-    void bind(ESPort_t port)
+    void bind(ECPort_t port)
     {
         csmbus::ctrl::ctrl_bind(port, this);
     }

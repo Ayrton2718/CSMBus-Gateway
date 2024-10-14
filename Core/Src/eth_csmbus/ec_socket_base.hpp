@@ -33,26 +33,26 @@ public:
         _recv_pcb = udp_new();
         if(udp_bind(_recv_pcb, IP_ADDR_ANY, recv_port) != ERR_OK)
         {
-            ESLed_err();
+            ECLed_err();
         }
         udp_recv(_recv_pcb, raw_callback, (void*)this);
     }
 
     void send(uint8_t reg_type, const void* data, size_t len)
     {
-        struct pbuf* p = pbuf_alloc(PBUF_TRANSPORT, sizeof(ESEther_header_t) + len, PBUF_POOL);
+        struct pbuf* p = pbuf_alloc(PBUF_TRANSPORT, sizeof(ECEther_header_t) + len, PBUF_POOL);
         if(p != NULL)
         {
-            ESEther_header_t* header = (ESEther_header_t*)p->payload;
+            ECEther_header_t* header = (ECEther_header_t*)p->payload;
             header->seq = ++_send_seq;
             header->ack = 0;
             header->reg_type = reg_type;
-            memcpy(&(((uint8_t*)p->payload)[sizeof(ESEther_header_t)]), data, len);
+            memcpy(&(((uint8_t*)p->payload)[sizeof(ECEther_header_t)]), data, len);
 
             this->send_locking(p);
             pbuf_free(p);
         }else{
-            ESLed_err();
+            ECLed_err();
         }
     }
 
@@ -79,13 +79,13 @@ private:
 
             if(err == ERR_OK)
             {
-                ESLed_ethTx();
+                ECLed_ethTx();
             }else{
-                ESLed_err();
+                ECLed_err();
             }
         }else{
             _send_is_lock = 0;
-            ESLed_err();
+            ECLed_err();
         }
     }
 };

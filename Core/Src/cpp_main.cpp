@@ -18,11 +18,11 @@
 
 void cpp_main(void)
 {
-    static csmbus::Robomas robomas1(ESPort_1);
-    static csmbus::CanSMBus can_csmbus1(ESPort_1);
-    // static csmbus::Robomas robomas2(ESPort_2);
-	// static csmbus::CanSMBus can_csmbus2(ESPort_2);
-    static csmbus::Odrive odrive2(ESPort_2);
+    static csmbus::Robomas robomas1(ECPort_1);
+    static csmbus::CanSMBus can_csmbus1(ECPort_1);
+    // static csmbus::Robomas robomas2(ECPort_2);
+	// static csmbus::CanSMBus can_csmbus2(ECPort_2);
+    static csmbus::Odrive odrive2(ECPort_2);
 
     std::array<csmbus::AppBase*, 3>  apps = {
         &robomas1,
@@ -37,7 +37,7 @@ void cpp_main(void)
         apps[i]->init();
     }
 
-    // ESBackdoor_enablePanel(ESPort_1, CSId_8);
+    // ECBackdoor_enablePanel(ECPort_1, CCId_8);
 
     while (1)
     {
@@ -46,12 +46,12 @@ void cpp_main(void)
             apps[i]->process();
         }
 
-        ESType_bool_t is_safety_on = ESCtrl_isSafetyOn();
+        ECType_bool_t is_safety_on = ECCtrl_isSafetyOn();
         MX_LWIP_Process();
-        ESId_process(is_safety_on);
-        ESBackdoor_process(is_safety_on);
-        ESCtrl_process();
-        ESCan_process();
-        ESLed_process(is_safety_on);
+        ECId_process(is_safety_on);
+        ECBackdoor_process(is_safety_on);
+        ECCtrl_process();
+        ECCan_process();
+        ECLed_process(is_safety_on);
     }
 }
