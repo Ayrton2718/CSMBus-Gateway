@@ -1,5 +1,5 @@
 /*
- * es_timer.h
+ * ec_timer.h
  *
  *  Created on: Oct 12, 2023
  *      Author: sen

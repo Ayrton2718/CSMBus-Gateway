@@ -1,3 +1,10 @@
+/*
+ * ec_can.cpp
+ *
+ *  Created on: Oct 12, 2023
+ *      Author: sen
+ */
+
 #include "ec_can.h"
 
 #include <string.h>

@@ -1,5 +1,5 @@
 /*
- * es_can.h
+ * ec_ctrl.h
  *
  *  Created on: Oct 12, 2023
  *      Author: sen

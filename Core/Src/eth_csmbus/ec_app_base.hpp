@@ -1,3 +1,10 @@
+/*
+ * ec_app_base.hpp
+ *
+ *  Created on: Oct 12, 2023
+ *      Author: sen
+ */
+
 #pragma once
 
 #include "ec_socket.hpp"
@@ -5,8 +12,6 @@
 #include "ec_timer.h"
 #include "ec_backdoor.h"
 #include "ec_ctrl.h"
-
-#ifdef __cplusplus
 
 namespace csmbus
 {
@@ -49,5 +54,3 @@ protected:
 };
 
 }
-
-#endif /*__cplusplus*/

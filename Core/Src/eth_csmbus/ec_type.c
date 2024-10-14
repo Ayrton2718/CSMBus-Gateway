@@ -1,3 +1,10 @@
+/*
+ * ec_type.c
+ *
+ *  Created on: Oct 12, 2023
+ *      Author: sen
+ */
+
 #include "ec_type.h"
 
 ESType_ackChecksum_t ESType_ackChecksumCalculator(const uint8_t* data, size_t data_len)

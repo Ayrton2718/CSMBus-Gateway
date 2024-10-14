@@ -1,3 +1,10 @@
+/*
+ * ec_ctrl.cpp
+ *
+ *  Created on: Oct 12, 2023
+ *      Author: sen
+ */
+
 #include "ec_ctrl.h"
 
 #include "ec_timer.h"

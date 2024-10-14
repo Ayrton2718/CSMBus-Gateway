@@ -1,12 +1,11 @@
 /*
- * can_csmbus.h
+ * can_csmbus.hpp
  *
  *  Created on: Oct 12, 2023
  *      Author: sen
  */
 
-#ifndef SRC_APP_CAN_CSMBUS_H_
-#define SRC_APP_CAN_CSMBUS_H_
+#pragma once
 
 #include "eth_csmbus.h"
 #include "cc_type.h"
@@ -169,5 +168,3 @@ public:
 };
 
 }
-
-#endif /* SRC_APP_CAN_CSMBUS_H_ */

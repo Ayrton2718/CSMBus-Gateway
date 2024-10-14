@@ -1,5 +1,5 @@
 /*
- * es_led.h
+ * ec_led.h
  *
  *  Created on: Oct 12, 2023
  *      Author: sen
