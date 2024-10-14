@@ -1,8 +1,8 @@
-#include "es_can.h"
+#include "ec_can.h"
 
 #include <string.h>
-#include "es_led.h"
-#include "es_backdoor.hpp"
+#include "ec_led.h"
+#include "ec_backdoor.h"
 
 #define EC_CAN_SWAP
 

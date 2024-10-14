@@ -5,10 +5,10 @@
  *      Author: sen
  */
 
-#ifndef SRC_ETH_CSMBUS_EC_TIMER_H_
-#define SRC_ETH_CSMBUS_EC_TIMER_H_
+#ifndef SRC_ETH_CSMBUS_EC_TIMER_H
+#define SRC_ETH_CSMBUS_EC_TIMER_H
 
-#include "es_type.h"
+#include "ec_type.h"
 #include "tim.h"
 
 #define EC_TIMER_USE_HTIM (&htim7)
@@ -94,4 +94,4 @@ public:
 
 #endif
 
-#endif /* SRC_ETH_CSMBUS_EC_TIMER_H_ */
+#endif /* SRC_ETH_CSMBUS_EC_TIMER_H */

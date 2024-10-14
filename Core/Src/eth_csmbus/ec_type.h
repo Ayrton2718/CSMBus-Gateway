@@ -5,8 +5,8 @@
  *      Author: sen
  */
 
-#ifndef SRC_ETH_CSMBUS_EC_TYPE_H_
-#define SRC_ETH_CSMBUS_EC_TYPE_H_
+#ifndef SRC_ETH_CSMBUS_EC_TYPE_H
+#define SRC_ETH_CSMBUS_EC_TYPE_H
 
 #include <stdint.h>
 #include <stddef.h>
@@ -120,4 +120,4 @@ ESType_ackChecksum_t ESType_ackChecksumCalculator(const uint8_t* data, size_t da
 }
 #endif
 
-#endif /* SRC_ETH_CSMBUS_EC_TYPE_H_ */
+#endif /* SRC_ETH_CSMBUS_EC_TYPE_H */

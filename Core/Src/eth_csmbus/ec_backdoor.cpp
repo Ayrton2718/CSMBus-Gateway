@@ -1,9 +1,9 @@
-#include "es_backdoor.hpp"
+#include "ec_backdoor.h"
 
-#include "es_socket_base.hpp"
-#include "es_timer.h"
-#include "es_can.h"
-#include "../app/can_csmbus/cs_type.h"
+#include "ec_socket_base.hpp"
+#include "ec_timer.h"
+#include "ec_can.h"
+#include "../app/can_csmbus/cc_type.h"
 
 #define EC_MSG_BUFF_COUNT   (4)
 

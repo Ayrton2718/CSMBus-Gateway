@@ -1,8 +1,8 @@
-#include "es_ctrl.h"
+#include "ec_ctrl.h"
 
-#include "es_timer.h"
-#include "es_socket_base.hpp"
-#include "es_backdoor.hpp"
+#include "ec_timer.h"
+#include "ec_socket_base.hpp"
+#include "ec_backdoor.h"
 
 #define EC_CTRL_CB_MAX_COUNT (EC_APP_MAX_COUNT*2)
 

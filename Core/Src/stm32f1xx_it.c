@@ -22,7 +22,7 @@
 #include "stm32f1xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "eth_csmbus/es_led.h"
+#include "eth_csmbus/ec_led.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

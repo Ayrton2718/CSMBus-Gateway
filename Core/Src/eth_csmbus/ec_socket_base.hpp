@@ -1,13 +1,10 @@
-#ifndef SRC_ETH_CSMBUS_EC_SOCKET_BASE_H_
-#define SRC_ETH_CSMBUS_EC_SOCKET_BASE_H_
-
-#ifdef __cplusplus
+#pragma once
 
 #include <string.h>
 #include <lwip.h>
 #include <udp.h>
 #include <ip_addr.h>
-#include "es_led.h"
+#include "ec_led.h"
 
 
 namespace csmbus::socket
@@ -87,7 +84,3 @@ private:
 };
 
 }
-
-#endif /*__cplusplus*/
-
-#endif /*SRC_ETH_CSMBUS_EC_SOCKET_BASE_H_*/

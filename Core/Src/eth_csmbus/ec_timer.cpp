@@ -1,6 +1,6 @@
-#include "es_timer.h"
+#include "ec_timer.h"
 
-#include "es_backdoor.hpp"
+#include "ec_backdoor.h"
 #include "tim.h"
 
 #define EC_TIMER_CB_MAX_COUNT (EC_APP_MAX_COUNT*2)

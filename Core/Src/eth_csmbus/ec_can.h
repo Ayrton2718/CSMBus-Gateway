@@ -5,11 +5,11 @@
  *      Author: sen
  */
 
-#ifndef SRC_ETH_CSMBUS_EC_CAN_H_
-#define SRC_ETH_CSMBUS_EC_CAN_H_
+#ifndef SRC_ETH_CSMBUS_EC_CAN_H
+#define SRC_ETH_CSMBUS_EC_CAN_H
 
 #include "can.h"
-#include "es_type.h"
+#include "ec_type.h"
 
 #define EC_CAN_ENABLE_RX1_BIND
 #define EC_CAN_ENABLE_RX2_BIND
@@ -79,4 +79,4 @@ private:
 
 #endif
 
-#endif /* SRC_ETH_CSMBUS_EC_TIMER_H_ */
+#endif /* SRC_ETH_CSMBUS_EC_TIMER_H */

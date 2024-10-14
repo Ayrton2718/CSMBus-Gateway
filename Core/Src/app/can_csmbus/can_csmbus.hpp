@@ -9,7 +9,7 @@
 #define SRC_APP_CAN_CSMBUS_H_
 
 #include "eth_csmbus.h"
-#include "cs_type.h"
+#include "cc_type.h"
 
 #define CAN_CSMBUS_BUFFER_COUNT (16)
 

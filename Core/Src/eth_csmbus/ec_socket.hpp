@@ -1,13 +1,8 @@
-#ifndef SRC_ETH_CSMBUS_EC_SOCKET_H_
-#define SRC_ETH_CSMBUS_EC_SOCKET_H_
-
-#include "es_socket_base.hpp"
-#include "es_led.h"
+#pragma once
 
 
-/*********C++ only*******/
-#ifdef __cplusplus
-
+#include "ec_socket_base.hpp"
+#include "ec_led.h"
 #include <string>
 #include <functional>
 
@@ -45,7 +40,3 @@ private:
 };
 
 }
-#endif /*__cplusplus*/
-
-
-#endif /*SRC_ETH_CSMBUS_EC_SOCKET_H_*/

@@ -5,8 +5,7 @@
  *      Author: sen
  */
 
-#ifndef SRC_ROBOMAS_H_
-#define SRC_ROBOMAS_H_
+#pragma once
 
 #include "eth_csmbus.h"
 
@@ -356,5 +355,3 @@ private:
 };
 
 }
-
-#endif /* SRC_ROBOMAS_H_ */

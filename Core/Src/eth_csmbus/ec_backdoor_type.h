@@ -5,10 +5,10 @@
  *      Author: sen
  */
 
-#ifndef SRC_ETH_CSMBUS_EC_BACKDOOR_TYPE_H_
-#define SRC_ETH_CSMBUS_EC_BACKDOOR_TYPE_H_
+#ifndef SRC_ETH_CSMBUS_EC_BACKDOOR_TYPE_H
+#define SRC_ETH_CSMBUS_EC_BACKDOOR_TYPE_H
 
-#include "es_type.h"
+#include "ec_type.h"
 
 #define ECTYPE_MSG_MAX_LEN  (126)
 #define ECTYPE_CAN_HZ_LEN   (12)
@@ -85,4 +85,4 @@ typedef enum {
 }
 #endif
 
-#endif /* SRC_ETH_CSMBUS_EC_BACKDOOR_TYPE_H_ */
+#endif /* SRC_ETH_CSMBUS_EC_BACKDOOR_TYPE_H*/

@@ -5,10 +5,10 @@
  *      Author: sen
  */
 
-#ifndef SRC_ETH_CSMBUS_EC_CTRL_H_
-#define SRC_ETH_CSMBUS_EC_CTRL_H_
+#ifndef SRC_ETH_CSMBUS_EC_CTRL_H
+#define SRC_ETH_CSMBUS_EC_CTRL_H
 
-#include "es_ctrl_type.h"
+#include "ec_ctrl_type.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,4 +50,4 @@ public:
 
 #endif /*__cplusplus*/
 
-#endif /* SRC_ETH_CSMBUS_EC_CTRL_H_ */
+#endif /* SRC_ETH_CSMBUS_EC_CTRL_H */

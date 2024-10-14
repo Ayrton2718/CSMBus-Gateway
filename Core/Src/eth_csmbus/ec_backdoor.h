@@ -5,12 +5,12 @@
  *      Author: sen
  */
 
-#ifndef SRC_ETH_CSMBUS_EC_BACKDOOR_H_
-#define SRC_ETH_CSMBUS_EC_BACKDOOR_H_
+#ifndef SRC_ETH_CSMBUS_EC_BACKDOOR_H
+#define SRC_ETH_CSMBUS_EC_BACKDOOR_H
 
 #include "can.h"
-#include "es_backdoor_type.h"
-#include "../app/can_csmbus/cs_type.h"
+#include "ec_backdoor_type.h"
+#include "../app/can_csmbus/cc_type.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -51,4 +51,4 @@ void ESBackdoor_canStatusCode(ESPort_t port, ESBackdoor_can_status_t err_code);
 
 #endif /*__cplusplus*/
 
-#endif /* SRC_ETH_CSMBUS_EC_BACKDOOR_H_ */
+#endif /* SRC_ETH_CSMBUS_EC_BACKDOOR_H */

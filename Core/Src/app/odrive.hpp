@@ -5,8 +5,7 @@
  *      Author: sen
  */
 
-#ifndef SRC_ODRIVE_H_
-#define SRC_ODRIVE_H_
+#pragma once
 
 #include "eth_csmbus.h"
 
@@ -400,5 +399,3 @@ private:
 };
 
 }
-
-#endif /* SRC_ODRIVE_H_ */

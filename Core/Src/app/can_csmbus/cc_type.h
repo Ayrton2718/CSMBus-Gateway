@@ -5,8 +5,8 @@
  *      Author: sen
  */
 
-#ifndef SRC_CAN_CSMBUS_CS_TYPE_H_
-#define SRC_CAN_CSMBUS_CS_TYPE_H_
+#ifndef SRC_CAN_CSMBUS_CC_TYPE_H
+#define SRC_CAN_CSMBUS_CC_TYPE_H
 
 #include <stdint.h>
 #include <string.h>
@@ -103,4 +103,4 @@ CSId_t CSId_convertNum2Id(uint8_t id);
 }
 #endif
 
-#endif /* SRC_CAN_CSMBUS_CS_TYPE_H_ */
+#endif /* SRC_CAN_CSMBUS_CC_TYPE_H */

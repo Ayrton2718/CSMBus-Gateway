@@ -1,10 +1,10 @@
 #pragma once
 
-#include "es_socket.hpp"
-#include "es_can.h"
-#include "es_timer.h"
-#include "es_backdoor.hpp"
-#include "es_ctrl.h"
+#include "ec_socket.hpp"
+#include "ec_can.h"
+#include "ec_timer.h"
+#include "ec_backdoor.h"
+#include "ec_ctrl.h"
 
 #ifdef __cplusplus
 

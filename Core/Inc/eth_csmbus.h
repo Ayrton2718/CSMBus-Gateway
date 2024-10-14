@@ -5,15 +5,18 @@
  *      Author: sen
  */
 
-#ifndef SRC_ETH_CSMBUS_ETH_CSMBUS_H_
-#define SRC_ETH_CSMBUS_ETH_CSMBUS_H_
+#ifndef SRC_ETH_CSMBUS_ETH_CSMBUS_H
+#define SRC_ETH_CSMBUS_ETH_CSMBUS_H
 
-#include "../Src/eth_csmbus/es_id.h"
-#include "../Src/eth_csmbus/es_led.h"
-#include "../Src/eth_csmbus/es_can.h"
-#include "../Src/eth_csmbus/es_timer.h"
-#include "../Src/eth_csmbus/es_ctrl.h"
+#include "../Src/eth_csmbus/ec_id.h"
+#include "../Src/eth_csmbus/ec_led.h"
+#include "../Src/eth_csmbus/ec_can.h"
+#include "../Src/eth_csmbus/ec_timer.h"
+#include "../Src/eth_csmbus/ec_ctrl.h"
+#include "../Src/eth_csmbus/ec_backdoor.h"
 
-#include "../Src/eth_csmbus/es_app_base.hpp"
+#ifdef __cplusplus
+#include "../Src/eth_csmbus/ec_app_base.hpp"
+#endif
 
-#endif /* SRC_ETH_CSMBUS_ETH_CSMBUS_H_ */
+#endif /* SRC_ETH_CSMBUS_ETH_CSMBUS_H */

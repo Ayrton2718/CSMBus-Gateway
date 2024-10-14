@@ -5,10 +5,10 @@
  *      Author: sen
  */
 
-#ifndef SRC_CAN_CSMBUS_EC_ID_H_
-#define SRC_CAN_CSMBUS_EC_ID_H_
+#ifndef SRC_CAN_CSMBUS_EC_ID_H
+#define SRC_CAN_CSMBUS_EC_ID_H
 
-#include "es_type.h"
+#include "ec_type.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -27,4 +27,4 @@ void ESId_process(ESType_bool_t is_safety_on);
 #endif
 
 
-#endif /* SRC_CAN_CSMBUS_CS_ID_H_ */
+#endif /* SRC_CAN_CSMBUS_EC_ID_H */

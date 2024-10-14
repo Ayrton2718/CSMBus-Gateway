@@ -1,4 +1,4 @@
-#include "es_type.h"
+#include "ec_type.h"
 
 ESType_ackChecksum_t ESType_ackChecksumCalculator(const uint8_t* data, size_t data_len)
 {
