@@ -5,13 +5,13 @@
  *      Author: sen
  */
 
-#ifndef SRC_ETH_SMBUS_ES_BACKDOOR_TYPE_H_
-#define SRC_ETH_SMBUS_ES_BACKDOOR_TYPE_H_
+#ifndef SRC_ETH_CSMBUS_EC_BACKDOOR_TYPE_H_
+#define SRC_ETH_CSMBUS_EC_BACKDOOR_TYPE_H_
 
 #include "es_type.h"
 
-#define ESTYPE_MSG_MAX_LEN  (126)
-#define ESTYPE_CAN_HZ_LEN   (12)
+#define ECTYPE_MSG_MAX_LEN  (126)
+#define ECTYPE_CAN_HZ_LEN   (12)
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,15 +28,15 @@ typedef struct{
 typedef struct{
     uint8_t     lvl  :   4;
     uint8_t     type :   4;
-    uint8_t     msg[ESTYPE_MSG_MAX_LEN + 1];
+    uint8_t     msg[ECTYPE_MSG_MAX_LEN + 1];
 }__attribute__((__packed__)) ESBackdoor_s2mMsgPacket_t;
 
 // enableのときは100msごとに送る
 typedef struct{
-    uint16_t        can1_ids[ESTYPE_CAN_HZ_LEN];
-    uint8_t         can1_count[ESTYPE_CAN_HZ_LEN];
-    uint16_t        can2_ids[ESTYPE_CAN_HZ_LEN];
-    uint8_t         can2_count[ESTYPE_CAN_HZ_LEN];
+    uint16_t        can1_ids[ECTYPE_CAN_HZ_LEN];
+    uint8_t         can1_count[ECTYPE_CAN_HZ_LEN];
+    uint16_t        can2_ids[ECTYPE_CAN_HZ_LEN];
+    uint8_t         can2_count[ECTYPE_CAN_HZ_LEN];
 }__attribute__((__packed__)) ESBackdoor_s2mDiagnosticsPacket_t;
 
 typedef struct{
@@ -85,4 +85,4 @@ typedef enum {
 }
 #endif
 
-#endif /* SRC_ETH_SMBUS_ES_BACKDOOR_TYPE_H_ */
+#endif /* SRC_ETH_CSMBUS_EC_BACKDOOR_TYPE_H_ */

@@ -5,8 +5,8 @@
  *      Author: sen
  */
 
-#ifndef SRC_ETH_SMBUS_ES_TYPE_H_
-#define SRC_ETH_SMBUS_ES_TYPE_H_
+#ifndef SRC_ETH_CSMBUS_EC_TYPE_H_
+#define SRC_ETH_CSMBUS_EC_TYPE_H_
 
 #include <stdint.h>
 #include <stddef.h>
@@ -15,19 +15,19 @@
 extern "C" {
 #endif
 
-#define ESTYPE_TRUE 	(1)
-#define ESTYPE_FALSE	(0)
+#define ECTYPE_TRUE 	(1)
+#define ECTYPE_FALSE	(0)
 typedef uint8_t 	ESType_bool_t;
 
-#define ESTYPE_GW_IP1	(192)
-#define ESTYPE_GW_IP2	(168)
-#define ESTYPE_GW_IP3	(0)
-#define ESTYPE_GW_IP4	(20)
+#define ECTYPE_GW_IP1	(192)
+#define ECTYPE_GW_IP2	(168)
+#define ECTYPE_GW_IP3	(0)
+#define ECTYPE_GW_IP4	(20)
 
-#define ESTYPE_MASTER_IP1	(192)
-#define ESTYPE_MASTER_IP2	(168)
-#define ESTYPE_MASTER_IP3	(0)
-#define ESTYPE_MASTER_IP4	(5)
+#define ECTYPE_MASTER_IP1	(192)
+#define ECTYPE_MASTER_IP2	(168)
+#define ECTYPE_MASTER_IP3	(0)
+#define ECTYPE_MASTER_IP4	(5)
 
 
 typedef enum{
@@ -50,17 +50,17 @@ $ sudo sysctl -p
 lsof port scan
 $ lsof -i -P
 */
-#define ESTYPE_BACKDOOR_M2S_PORT 	    (21210)
-#define ESTYPE_BACKDOOR_S2M_PORT 	    (6160)
+#define ECTYPE_BACKDOOR_M2S_PORT 	    (21210)
+#define ECTYPE_BACKDOOR_S2M_PORT 	    (6160)
 
-#define ESTYPE_CTRL_M2S_PORT 	    (21211)
-#define ESTYPE_CTRL_S2M_PORT 	    (6161)
+#define ECTYPE_CTRL_M2S_PORT 	    (21211)
+#define ECTYPE_CTRL_S2M_PORT 	    (6161)
 
-#define ESTYPE_APP_M2S_PORT(port, appid)  	(21220 + ((uint8_t)appid * 2) + port)
-#define ESTYPE_APP_S2M_PORT(appid)  		(6162 + (uint8_t)appid)
+#define ECTYPE_APP_M2S_PORT(port, appid)  	(21220 + ((uint8_t)appid * 2) + port)
+#define ECTYPE_APP_S2M_PORT(appid)  		(6162 + (uint8_t)appid)
 
-#define ES_APP_MAX_COUNT    (4)
-#define ESTYPE_PACKET_MAX_SIZE (512)
+#define EC_APP_MAX_COUNT    (4)
+#define ECTYPE_PACKET_MAX_SIZE (512)
 
 typedef struct{
     uint8_t     seq :   7;
@@ -73,8 +73,8 @@ typedef struct{
     uint32_t            checksum;
 }__attribute__((__packed__)) ESApp_ackPacket_t;
 
-#define ES_ID_MAX_COUNT     (16)
-#define ES_REG_MAX_COUNT    (16)
+#define EC_ID_MAX_COUNT     (16)
+#define EC_REG_MAX_COUNT    (16)
 
 typedef enum{
     ESId_1 = 0,
@@ -107,9 +107,9 @@ typedef enum{
 } ESReg_t;
 
 
-#define ESTYPE_REG_2_REGTYPE(port, reg) (((reg) & 0x0F) | ((port) << 4))
-#define ESTYPE_REGTYPE_2_CAN_PORT(regtype) (((regtype) >> 4) & 0x0F)
-#define ESTYPE_REGTYPE_2_REG(regtype) ((regtype) & 0x0F)
+#define ECTYPE_REG_2_REGTYPE(port, reg) (((reg) & 0x0F) | ((port) << 4))
+#define ECTYPE_REGTYPE_2_CAN_PORT(regtype) (((regtype) >> 4) & 0x0F)
+#define ECTYPE_REGTYPE_2_REG(regtype) ((regtype) & 0x0F)
 
 typedef uint32_t ESType_ackChecksum_t;
 
@@ -120,4 +120,4 @@ ESType_ackChecksum_t ESType_ackChecksumCalculator(const uint8_t* data, size_t da
 }
 #endif
 
-#endif /* SRC_ETH_SMBUS_ES_TYPE_H_ */
+#endif /* SRC_ETH_CSMBUS_EC_TYPE_H_ */

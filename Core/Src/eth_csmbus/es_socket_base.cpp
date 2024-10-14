@@ -1,6 +1,6 @@
 #include "es_socket_base.hpp"
 
-namespace smbus::socket
+namespace csmbus::socket
 {
 
 void SocketBase::raw_callback(void *arg, struct udp_pcb *pcb, struct pbuf *p, const ip_addr_t *addr, u16_t port)

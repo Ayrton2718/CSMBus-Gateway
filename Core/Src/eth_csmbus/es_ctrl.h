@@ -5,8 +5,8 @@
  *      Author: sen
  */
 
-#ifndef SRC_ETH_SMBUS_ES_CTRL_H_
-#define SRC_ETH_SMBUS_ES_CTRL_H_
+#ifndef SRC_ETH_CSMBUS_EC_CTRL_H_
+#define SRC_ETH_CSMBUS_EC_CTRL_H_
 
 #include "es_ctrl_type.h"
 
@@ -27,7 +27,7 @@ void ESCtrl_process(void);
 
 #ifdef __cplusplus
 
-namespace smbus::ctrl
+namespace csmbus::ctrl
 {
 
 void ctrl_bind(ESPort_t port, void* ctrl_iface);
@@ -40,7 +40,7 @@ public:
 
     void bind(ESPort_t port)
     {
-        smbus::ctrl::ctrl_bind(port, this);
+        csmbus::ctrl::ctrl_bind(port, this);
     }
 
     virtual void reset_callback(void) = 0;
@@ -50,4 +50,4 @@ public:
 
 #endif /*__cplusplus*/
 
-#endif /* SRC_ETH_SMBUS_ES_CTRL_H_ */
+#endif /* SRC_ETH_CSMBUS_EC_CTRL_H_ */

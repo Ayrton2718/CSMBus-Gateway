@@ -5,8 +5,8 @@
  *      Author: sen
  */
 
-#ifndef SRC_ETH_SMBUS_ES_BACKDOOR_H_
-#define SRC_ETH_SMBUS_ES_BACKDOOR_H_
+#ifndef SRC_ETH_CSMBUS_EC_BACKDOOR_H_
+#define SRC_ETH_CSMBUS_EC_BACKDOOR_H_
 
 #include "can.h"
 #include "es_backdoor_type.h"
@@ -38,17 +38,17 @@ void ESBackdoor_log(ESBackdoor_msgLvl_t lvl, ESBackdoor_msgType_t type, std::str
 void ESBackdoor_ethStatusCode(ESBackdoor_eth_status_t err_code);
 void ESBackdoor_canStatusCode(ESPort_t port, ESBackdoor_can_status_t err_code);
 
-#define ES_ETH_RESET()          ESBackdoor_ethStatusCode(ESBackdoor_eth_status_RESETING)
+#define EC_ETH_RESET()          ESBackdoor_ethStatusCode(ESBackdoor_eth_status_RESETING)
 
-#define ES_CAN_OVERFLOW(port)   ESBackdoor_canStatusCode(port, ESBackdoor_can_status_OVERFLOWED)
-#define ES_CAN_SEND_FAIL(port)   ESBackdoor_canStatusCode(port, ESBackdoor_can_status_SEND_FAIL)
+#define EC_CAN_OVERFLOW(port)   ESBackdoor_canStatusCode(port, ESBackdoor_can_status_OVERFLOWED)
+#define EC_CAN_SEND_FAIL(port)   ESBackdoor_canStatusCode(port, ESBackdoor_can_status_SEND_FAIL)
 
-#define ES_INFO(port, msg)   ESBackdoor_log(ESBackdoor_msgLvl_INFO, (ESBackdoor_msgType_t)port, msg)
-#define ES_ERR(port, msg)   ESBackdoor_log(ESBackdoor_msgLvl_ERR, (ESBackdoor_msgType_t)port, msg)
+#define EC_INFO(port, msg)   ESBackdoor_log(ESBackdoor_msgLvl_INFO, (ESBackdoor_msgType_t)port, msg)
+#define EC_ERR(port, msg)   ESBackdoor_log(ESBackdoor_msgLvl_ERR, (ESBackdoor_msgType_t)port, msg)
 
-#define ES_SYS_INFO(msg)   ESBackdoor_log(ESBackdoor_msgLvl_INFO, ESBackdoor_msgType_SYSTEM, msg)
-#define ES_SYS_ERR(msg)   ESBackdoor_log(ESBackdoor_msgLvl_ERR, ESBackdoor_msgType_SYSTEM, msg)
+#define EC_SYS_INFO(msg)   ESBackdoor_log(ESBackdoor_msgLvl_INFO, ESBackdoor_msgType_SYSTEM, msg)
+#define EC_SYS_ERR(msg)   ESBackdoor_log(ESBackdoor_msgLvl_ERR, ESBackdoor_msgType_SYSTEM, msg)
 
 #endif /*__cplusplus*/
 
-#endif /* SRC_ETH_SMBUS_ES_BACKDOOR_H_ */
+#endif /* SRC_ETH_CSMBUS_EC_BACKDOOR_H_ */

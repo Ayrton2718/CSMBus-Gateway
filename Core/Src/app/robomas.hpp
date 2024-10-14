@@ -12,7 +12,7 @@
 
 #define ROBOMAS_CUR_LP_COEFF (0.1)
 
-namespace smbus
+namespace csmbus
 {
 
 class Robomas : public AppBase

@@ -5,8 +5,8 @@
  *      Author: sen
  */
 
-#ifndef SRC_CAN_SMBUS_ES_ID_H_
-#define SRC_CAN_SMBUS_ES_ID_H_
+#ifndef SRC_CAN_CSMBUS_EC_ID_H_
+#define SRC_CAN_CSMBUS_EC_ID_H_
 
 #include "es_type.h"
 
@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 
-#define ES_ID_FIXED_ADDR (ESId_1)
+#define EC_ID_FIXED_ADDR (ESId_1)
 
 void ESId_init(void);
 
@@ -27,4 +27,4 @@ void ESId_process(ESType_bool_t is_safety_on);
 #endif
 
 
-#endif /* SRC_CAN_SMBUS_CS_ID_H_ */
+#endif /* SRC_CAN_CSMBUS_CS_ID_H_ */

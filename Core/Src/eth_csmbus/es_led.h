@@ -5,8 +5,8 @@
  *      Author: sen
  */
 
-#ifndef SRC_ETH_SMBUS_ES_LED_H_
-#define SRC_ETH_SMBUS_ES_LED_H_
+#ifndef SRC_ETH_CSMBUS_EC_LED_H_
+#define SRC_ETH_CSMBUS_EC_LED_H_
 
 #include "stddef.h"
 #include "es_type.h"
@@ -34,4 +34,4 @@ void ESLed_process(ESType_bool_t is_safety_on);
 }
 #endif
 
-#endif /* SRC_ETH_SMBUS_ES_LED_H_ */
+#endif /* SRC_ETH_CSMBUS_EC_LED_H_ */

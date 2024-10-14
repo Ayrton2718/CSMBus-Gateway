@@ -5,13 +5,13 @@
  *      Author: sen
  */
 
-#ifndef SRC_ETH_SMBUS_ES_TIMER_H_
-#define SRC_ETH_SMBUS_ES_TIMER_H_
+#ifndef SRC_ETH_CSMBUS_EC_TIMER_H_
+#define SRC_ETH_CSMBUS_EC_TIMER_H_
 
 #include "es_type.h"
 #include "tim.h"
 
-#define ES_TIMER_USE_HTIM (&htim7)
+#define EC_TIMER_USE_HTIM (&htim7)
 
 #ifdef __cplusplus
 extern "C" {
@@ -42,7 +42,7 @@ void __ESTimer_interrupt(TIM_HandleTypeDef* htim);
 
 #include <functional>
 
-namespace smbus::timer
+namespace csmbus::timer
 {
 
 void timer_bind(ESPort_t port, void* wall_tim);
@@ -55,7 +55,7 @@ public:
 
     void bind(ESPort_t port)
     {
-        smbus::timer::timer_bind(port, this);
+        csmbus::timer::timer_bind(port, this);
     }
 
     virtual void timer_callback(void) = 0;
@@ -94,4 +94,4 @@ public:
 
 #endif
 
-#endif /* SRC_ETH_SMBUS_ES_TIMER_H_ */
+#endif /* SRC_ETH_CSMBUS_EC_TIMER_H_ */

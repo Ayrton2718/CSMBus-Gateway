@@ -5,7 +5,7 @@
 #include "es_can.h"
 #include "../app/can_csmbus/cs_type.h"
 
-#define ES_MSG_BUFF_COUNT   (4)
+#define EC_MSG_BUFF_COUNT   (4)
 
 typedef struct{    
     volatile uint8_t            ping_wp;
@@ -18,13 +18,13 @@ typedef struct{
     uint8_t             log_wp;
     volatile uint8_t    log_rp;
     volatile uint8_t    log_count;
-    ESBackdoor_s2mMsgPacket_t   log_buff[ES_MSG_BUFF_COUNT];
+    ESBackdoor_s2mMsgPacket_t   log_buff[EC_MSG_BUFF_COUNT];
 } ESBackdoor_obj_t;
 
 static ESBackdoor_obj_t 	g_obj;
 
 
-class BackdoorCan : public smbus::can::CanSocket
+class BackdoorCan : public csmbus::can::CanSocket
 {
 private:
     bool _is_enable_panel = false;
@@ -35,11 +35,11 @@ private:
     uint8_t _panel_packet[sizeof(ESBackdoor_s2mPingPacket_t::panel_packet)];
 
 public:
-    BackdoorCan() : smbus::can::CanSocket(){}
+    BackdoorCan() : csmbus::can::CanSocket(){}
 
     void enable_panel(CSId_t id){
-        _panel_recv_id = CSTYPE_MAKE_S2M_CAN_ID(id, CSTYPE_MAKE_USER_REG(CSTYPE_MAKE_WRITE_REG(CSReg_0)));
-        _panel_send_id = CSTYPE_MAKE_M2S_CAN_ID(id, CSTYPE_MAKE_USER_REG(CSTYPE_MAKE_WRITE_REG(CSReg_0)));
+        _panel_recv_id = CCTYPE_MAKE_S2M_CAN_ID(id, CCTYPE_MAKE_USER_REG(CCTYPE_MAKE_WRITE_REG(CSReg_0)));
+        _panel_send_id = CCTYPE_MAKE_M2S_CAN_ID(id, CCTYPE_MAKE_USER_REG(CCTYPE_MAKE_WRITE_REG(CSReg_0)));
         _is_enable_panel = true;
     }
 
@@ -71,14 +71,14 @@ public:
     }
 };
 
-class BackdoorEther : public smbus::socket::SocketBase
+class BackdoorEther : public csmbus::socket::SocketBase
 {
 private:
     bool _is_enable_panel = false;
     BackdoorCan* _can_sock = nullptr;
 
 public:
-    BackdoorEther() : smbus::socket::SocketBase(){}
+    BackdoorEther() : csmbus::socket::SocketBase(){}
 
     void set_panel(BackdoorCan* can_sock){
         _can_sock = can_sock;
@@ -121,7 +121,7 @@ void ESBackdoor_init(void)
     g_obj.log_count = 0;
     memset(g_obj.log_buff, 0x00, sizeof(g_obj.log_buff));
 
-    g_ether_sock.bind(ESTYPE_BACKDOOR_S2M_PORT, ESTYPE_BACKDOOR_M2S_PORT);
+    g_ether_sock.bind(ECTYPE_BACKDOOR_S2M_PORT, ECTYPE_BACKDOOR_M2S_PORT);
 
     g_can_sock[0].bind(ESPort_1);
     g_can_sock[0].disable();
@@ -169,7 +169,7 @@ void ESBackdoor_process(ESType_bool_t is_safety_on)
         ESTimer_timStart(&g_obj.log_tim);
         if(0 < g_obj.log_count)
         {
-            ESBackdoor_s2mMsgPacket_t* packet = &g_obj.log_buff[g_obj.log_rp % ES_MSG_BUFF_COUNT];
+            ESBackdoor_s2mMsgPacket_t* packet = &g_obj.log_buff[g_obj.log_rp % EC_MSG_BUFF_COUNT];
             g_ether_sock.send(ESBackdoor_s2mRegType_MSG, packet, sizeof(ESBackdoor_s2mMsgPacket_t));
             g_obj.log_rp++;
             g_obj.log_count--;
@@ -180,22 +180,22 @@ void ESBackdoor_process(ESType_bool_t is_safety_on)
 
 void ESBackdoor_log(ESBackdoor_msgLvl_t lvl, ESBackdoor_msgType_t type, std::string msg)
 {
-    if(ESTYPE_MSG_MAX_LEN < msg.size())
+    if(ECTYPE_MSG_MAX_LEN < msg.size())
     {
         msg.resize(127, '\0');
     }
 
-    if(ES_MSG_BUFF_COUNT == g_obj.log_count)
+    if(EC_MSG_BUFF_COUNT == g_obj.log_count)
     {
         g_obj.log_rp++;
         g_obj.log_count--;
     }
 
-    ESBackdoor_s2mMsgPacket_t* packet = &g_obj.log_buff[g_obj.log_wp % ES_MSG_BUFF_COUNT];
+    ESBackdoor_s2mMsgPacket_t* packet = &g_obj.log_buff[g_obj.log_wp % EC_MSG_BUFF_COUNT];
     packet->lvl = lvl;
     packet->type = type;
     memcpy(packet->msg, msg.data(), msg.size());
-    packet->msg[ESTYPE_MSG_MAX_LEN] = '\0';
+    packet->msg[ECTYPE_MSG_MAX_LEN] = '\0';
 
     g_obj.log_wp++;
     g_obj.log_count++;

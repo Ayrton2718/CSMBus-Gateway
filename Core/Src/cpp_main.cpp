@@ -11,17 +11,17 @@
 
 void cpp_main(void)
 {
-    static smbus::Robomas robomas1(ESPort_1);
-    static smbus::CanSMBus can_smbus1(ESPort_1);
-    // static smbus::Robomas robomas2(ESPort_2);
-	// static smbus::CanSMBus can_smbus2(ESPort_2);
-    static smbus::Odrive odrive2(ESPort_2);
+    static csmbus::Robomas robomas1(ESPort_1);
+    static csmbus::CanSMBus can_csmbus1(ESPort_1);
+    // static csmbus::Robomas robomas2(ESPort_2);
+	// static csmbus::CanSMBus can_csmbus2(ESPort_2);
+    static csmbus::Odrive odrive2(ESPort_2);
 
-    std::array<smbus::AppBase*, 3>  apps = {
+    std::array<csmbus::AppBase*, 3>  apps = {
         &robomas1,
-        &can_smbus1,
+        &can_csmbus1,
 		// &robomas2,
-        // &can_smbus2
+        // &can_csmbus2
         &odrive2,
     };
 

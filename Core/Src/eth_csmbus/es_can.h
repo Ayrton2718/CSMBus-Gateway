@@ -5,16 +5,16 @@
  *      Author: sen
  */
 
-#ifndef SRC_ETH_SMBUS_ES_CAN_H_
-#define SRC_ETH_SMBUS_ES_CAN_H_
+#ifndef SRC_ETH_CSMBUS_EC_CAN_H_
+#define SRC_ETH_CSMBUS_EC_CAN_H_
 
 #include "can.h"
 #include "es_type.h"
 
-#define ES_CAN_ENABLE_RX1_BIND
-#define ES_CAN_ENABLE_RX2_BIND
+#define EC_CAN_ENABLE_RX1_BIND
+#define EC_CAN_ENABLE_RX2_BIND
 
-#define ES_CAN_BUFF_MAX_COUNT (8)
+#define EC_CAN_BUFF_MAX_COUNT (8)
 
 
 #ifdef __cplusplus
@@ -33,7 +33,7 @@ void ESCan_process(void);
 
 #include <array>
 
-namespace smbus::can
+namespace csmbus::can
 {
 
 size_t can_bind(ESPort_t port, void* socket);
@@ -49,20 +49,20 @@ public:
     void bind(ESPort_t port)
     {
         _port = port;
-        _array_index = smbus::can::can_bind(_port, this);
+        _array_index = csmbus::can::can_bind(_port, this);
     }
 
     void can_send(uint16_t can_id, const uint8_t* data, size_t len)
     {
-        smbus::can::can_send(_port, can_id, data, len);
+        csmbus::can::can_send(_port, can_id, data, len);
     }
 
     void disable(void){
-        smbus::can::set_enable(_port, _array_index, false);
+        csmbus::can::set_enable(_port, _array_index, false);
     }
 
     void enable(void){
-        smbus::can::set_enable(_port, _array_index, true);
+        csmbus::can::set_enable(_port, _array_index, true);
     }
 
     virtual bool can_callback(uint16_t can_id, const uint8_t* data, size_t len) = 0;
@@ -72,11 +72,11 @@ protected:
 
 private:
     CAN_HandleTypeDef* _hcan = NULL;
-    size_t _array_index = ES_APP_MAX_COUNT - 1;
+    size_t _array_index = EC_APP_MAX_COUNT - 1;
 };
 
 }
 
 #endif
 
-#endif /* SRC_ETH_SMBUS_ES_TIMER_H_ */
+#endif /* SRC_ETH_CSMBUS_EC_TIMER_H_ */

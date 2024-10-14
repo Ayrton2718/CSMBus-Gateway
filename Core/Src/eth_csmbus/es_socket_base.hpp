@@ -1,5 +1,5 @@
-#ifndef SRC_ETH_SMBUS_ES_SOCKET_BASE_H_
-#define SRC_ETH_SMBUS_ES_SOCKET_BASE_H_
+#ifndef SRC_ETH_CSMBUS_EC_SOCKET_BASE_H_
+#define SRC_ETH_CSMBUS_EC_SOCKET_BASE_H_
 
 #ifdef __cplusplus
 
@@ -10,7 +10,7 @@
 #include "es_led.h"
 
 
-namespace smbus::socket
+namespace csmbus::socket
 {
 
 class SocketBase
@@ -21,7 +21,7 @@ public:
     void bind(u16_t send_port, u16_t recv_port)
     {
         _send_pcb = udp_new();
-        IP4_ADDR(&_send_addr, ESTYPE_MASTER_IP1, ESTYPE_MASTER_IP2, ESTYPE_MASTER_IP3, ESTYPE_MASTER_IP4);
+        IP4_ADDR(&_send_addr, ECTYPE_MASTER_IP1, ECTYPE_MASTER_IP2, ECTYPE_MASTER_IP3, ECTYPE_MASTER_IP4);
         _send_is_lock = 0;
         _send_seq = 0;
         _send_port = send_port;
@@ -90,4 +90,4 @@ private:
 
 #endif /*__cplusplus*/
 
-#endif /*SRC_ETH_SMBUS_ES_SOCKET_BASE_H_*/
+#endif /*SRC_ETH_CSMBUS_EC_SOCKET_BASE_H_*/

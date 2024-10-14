@@ -2,8 +2,8 @@
 
 #include <main.h>
 
-#define ES_LED_ID_BLINK_TIM (10)
-#define ES_LED_ID_SLEEP_TIM (100)
+#define EC_LED_ID_BLINK_TIM (10)
+#define EC_LED_ID_SLEEP_TIM (100)
 
 
 static uint8_t      g_isEnableBlink;

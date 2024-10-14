@@ -8,7 +8,7 @@
 
 #ifdef __cplusplus
 
-namespace smbus
+namespace csmbus
 {
 
 class AppBase : protected socket::AppSocket, protected can::CanSocket, protected timer::WallTimer, protected ctrl::CtrlInterface
@@ -39,12 +39,12 @@ protected:
 
     void info(std::string msg)
     {
-        ES_INFO(_port, msg);
+        EC_INFO(_port, msg);
     }
     
     void err(std::string msg)
     {
-        ES_ERR(_port, msg);
+        EC_ERR(_port, msg);
     }
 };
 

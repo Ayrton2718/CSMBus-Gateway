@@ -10,7 +10,7 @@
 
 #include "eth_csmbus.h"
 
-namespace smbus
+namespace csmbus
 {
 
 class Odrive : public AppBase

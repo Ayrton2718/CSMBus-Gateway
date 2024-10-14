@@ -1,19 +1,19 @@
 /*
- * can_smbus.h
+ * can_csmbus.h
  *
  *  Created on: Oct 12, 2023
  *      Author: sen
  */
 
-#ifndef SRC_APP_CAN_SMBUS_H_
-#define SRC_APP_CAN_SMBUS_H_
+#ifndef SRC_APP_CAN_CSMBUS_H_
+#define SRC_APP_CAN_CSMBUS_H_
 
 #include "eth_csmbus.h"
 #include "cs_type.h"
 
-#define CAN_SMBUS_BUFFER_COUNT (16)
+#define CAN_CSMBUS_BUFFER_COUNT (16)
 
-namespace smbus
+namespace csmbus
 {
 
 class CanSMBus : public AppBase
@@ -39,7 +39,7 @@ private:
         uint8_t wp;
         volatile uint8_t rp;
         volatile uint8_t count;
-        CanSMBus_packet_t packet[CAN_SMBUS_BUFFER_COUNT];
+        CanSMBus_packet_t packet[CAN_CSMBUS_BUFFER_COUNT];
     } ring_buff_t;
 
     ring_buff_t     _s2m_buff;
@@ -84,7 +84,7 @@ public:
             size_t send_count = rb->count;
             for(size_t i = 0; (i < send_count) && (i < 4); i++)
             {
-                s2m.packet[s2m.count] = rb->packet[rb->rp % CAN_SMBUS_BUFFER_COUNT];
+                s2m.packet[s2m.count] = rb->packet[rb->rp % CAN_CSMBUS_BUFFER_COUNT];
                 s2m.count++;
                 
                 rb->rp++;
@@ -107,10 +107,10 @@ public:
             {
                 uint8_t buff[4];
                 buff[3] = 'U'; buff[2] = 'N'; buff[1] = 'S'; buff[0] = 'F'; 
-                this->can_send(CSTYPE_MAKE_M2S_CAN_ID(CSId_BRC, CSType_brcReg_Unsafe), buff, 4);
+                this->can_send(CCTYPE_MAKE_M2S_CAN_ID(CSId_BRC, CSType_brcReg_Unsafe), buff, 4);
             }else{
                 uint8_t buff[4];
-                this->can_send(CSTYPE_MAKE_M2S_CAN_ID(CSId_BRC, CSType_brcReg_Safety), buff, 0);
+                this->can_send(CCTYPE_MAKE_M2S_CAN_ID(CSId_BRC, CSType_brcReg_Safety), buff, 0);
             }
         }
         _befor_safety = is_safety_on;
@@ -130,21 +130,21 @@ public:
 
     bool can_callback(uint16_t can_id, const uint8_t* data, size_t len)
     {
-        if(CSTYPE_IS_S2M_PACKET(can_id))
+        if(CCTYPE_IS_S2M_PACKET(can_id))
         {
-            if(CSId_convertId2Num(CSTYPE_GET_PACKET_ID(can_id)) < CSId_convertId2Num(CSId_12))
+            if(CSId_convertId2Num(CCTYPE_GET_PACKET_ID(can_id)) < CSId_convertId2Num(CSId_12))
             {
                 ring_buff_t* rb = &_s2m_buff;
-                if(rb->count == CAN_SMBUS_BUFFER_COUNT)
+                if(rb->count == CAN_CSMBUS_BUFFER_COUNT)
                 {
                     rb->rp++;
                     rb->count--;
                     ESLed_err();
                 }
 
-                rb->packet[rb->wp % CAN_SMBUS_BUFFER_COUNT].can_id = can_id;
-                rb->packet[rb->wp % CAN_SMBUS_BUFFER_COUNT].len = len;
-                memcpy(rb->packet[rb->wp % CAN_SMBUS_BUFFER_COUNT].data, data, 8);
+                rb->packet[rb->wp % CAN_CSMBUS_BUFFER_COUNT].can_id = can_id;
+                rb->packet[rb->wp % CAN_CSMBUS_BUFFER_COUNT].len = len;
+                memcpy(rb->packet[rb->wp % CAN_CSMBUS_BUFFER_COUNT].data, data, 8);
                 rb->wp++;
                 rb->count++;
                 return true;
@@ -160,7 +160,7 @@ public:
     {
         uint8_t buff[4];
         buff[3] = 'R'; buff[2] = 'E'; buff[1] = 'S'; buff[0] = 'T';
-        this->can_send(CSTYPE_MAKE_M2S_CAN_ID(CSId_BRC, CSType_brcReg_Reset), buff, 4);
+        this->can_send(CCTYPE_MAKE_M2S_CAN_ID(CSId_BRC, CSType_brcReg_Reset), buff, 4);
         HAL_Delay(1);
 
         _tim.reset();
@@ -170,4 +170,4 @@ public:
 
 }
 
-#endif /* SRC_APP_CAN_SMBUS_H_ */
+#endif /* SRC_APP_CAN_CSMBUS_H_ */

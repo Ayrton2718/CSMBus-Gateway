@@ -11,13 +11,13 @@
 #include "main.h"
 #include "stm32f1xx_hal.h"
 
-#define ES_ID_CHECK_PATTERN (0x94DACB7A)
+#define EC_ID_CHECK_PATTERN (0x94DACB7A)
 
-#define ES_ID_FLASH_START_ADDR (0x803F000)
-#define ES_ID_FLASH_END_ADDR   (0x803F7FF)
+#define EC_ID_FLASH_START_ADDR (0x803F000)
+#define EC_ID_FLASH_END_ADDR   (0x803F7FF)
 
-#define ES_ID_BLINK_TIM (20)
-#define ES_ID_SLEEP_TIM (100)
+#define EC_ID_BLINK_TIM (20)
+#define EC_ID_SLEEP_TIM (100)
 
 typedef struct
 {
@@ -66,7 +66,7 @@ void ESId_init(void)
             HAL_Delay(200);
         }
 
-        ESId_flashWriteId(ES_ID_FIXED_ADDR);
+        ESId_flashWriteId(EC_ID_FIXED_ADDR);
         NVIC_SystemReset();
     }
 }
@@ -96,7 +96,7 @@ void ESId_process(ESType_bool_t is_safety_on)
             {
                 if(300 <= g_push_counter)
                 {
-                    if(btn == ESTYPE_FALSE)
+                    if(btn == ECTYPE_FALSE)
                     {
                         uint16_t id_num = 0;
                         uint8_t flg = 0;
@@ -117,7 +117,7 @@ void ESId_process(ESType_bool_t is_safety_on)
                                 end_tick = HAL_GetTick() + 3000;
                             }
 
-                            if((btn == ESTYPE_FALSE) && flg == 1)
+                            if((btn == ECTYPE_FALSE) && flg == 1)
                             {
                                 HAL_GPIO_WritePin(LED_ID_GPIO_Port, LED_ID_Pin, GPIO_PIN_RESET);
                                 flg = 0;
@@ -157,11 +157,11 @@ void ESId_process(ESType_bool_t is_safety_on)
         {
             if(g_push_counter < 300)
             {
-                if(g_idLoopCount <= (ES_ID_SLEEP_TIM + ES_ID_BLINK_TIM))
+                if(g_idLoopCount <= (EC_ID_SLEEP_TIM + EC_ID_BLINK_TIM))
                 {
                     HAL_GPIO_WritePin(LED_ID_GPIO_Port, LED_ID_Pin, GPIO_PIN_RESET);
                 }else{
-                    if((g_idLoopCount % ES_ID_BLINK_TIM) == 0)
+                    if((g_idLoopCount % EC_ID_BLINK_TIM) == 0)
                     {
                         HAL_GPIO_TogglePin(LED_ID_GPIO_Port, LED_ID_Pin);
                     }
@@ -169,7 +169,7 @@ void ESId_process(ESType_bool_t is_safety_on)
 
                 if(g_idLoopCount == 0)
                 {
-                    g_idLoopCount = (((uint16_t)g_my_addr + 1) * ES_ID_BLINK_TIM * 2) + (ES_ID_SLEEP_TIM + ES_ID_BLINK_TIM);
+                    g_idLoopCount = (((uint16_t)g_my_addr + 1) * EC_ID_BLINK_TIM * 2) + (EC_ID_SLEEP_TIM + EC_ID_BLINK_TIM);
                 }else{
                     g_idLoopCount--;
                 }
@@ -185,7 +185,7 @@ void ESId_process(ESType_bool_t is_safety_on)
 
 static ESId_t ESId_flashReadId(void)
 {
-    const ESId_flashData_t* flash_data_p = (const ESId_flashData_t*)ES_ID_FLASH_START_ADDR;
+    const ESId_flashData_t* flash_data_p = (const ESId_flashData_t*)EC_ID_FLASH_START_ADDR;
     ESId_flashData_t flash_data;
 
     memcpy(&flash_data, flash_data_p, sizeof(ESId_flashData_t));
@@ -193,7 +193,7 @@ static ESId_t ESId_flashReadId(void)
     ESId_flash1_t* flash1 = (ESId_flash1_t*)&flash_data.flash1;
     ESId_flash2_t* flash2 = (ESId_flash2_t*)&flash_data.flash2;
 
-    if(flash1->check_pattern == ES_ID_CHECK_PATTERN)
+    if(flash1->check_pattern == EC_ID_CHECK_PATTERN)
     {
         if(flash2->checksum == flash2->id)
         {
@@ -244,7 +244,7 @@ static void ESId_flashWriteId(ESId_t id)
     uint32_t pageError = 0;
 	erase.TypeErase = FLASH_TYPEERASE_PAGES;	// select sector
     erase.Banks = FLASH_BANK_1;
-    erase.PageAddress = ES_ID_FLASH_START_ADDR;
+    erase.PageAddress = EC_ID_FLASH_START_ADDR;
     erase.NbPages = 1;
 	if(HAL_FLASHEx_Erase(&erase, &pageError) != HAL_OK)
     {
@@ -260,11 +260,11 @@ static void ESId_flashWriteId(ESId_t id)
     ESId_flashData_t flash_data;
     ESId_flash1_t* flash1 = (ESId_flash1_t*)&flash_data.flash1;
     ESId_flash2_t* flash2 = (ESId_flash2_t*)&flash_data.flash2;
-    flash1->check_pattern = ES_ID_CHECK_PATTERN;
+    flash1->check_pattern = EC_ID_CHECK_PATTERN;
     flash2->id = id;
     flash2->checksum = flash2->id;
 
-    if(HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, ES_ID_FLASH_START_ADDR, (uint64_t)flash_data.flash1) != HAL_OK)
+    if(HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, EC_ID_FLASH_START_ADDR, (uint64_t)flash_data.flash1) != HAL_OK)
     {
         HAL_GPIO_WritePin(LED_ETH_ERR_GPIO_Port, LED_ETH_ERR_Pin, GPIO_PIN_SET);
         HAL_GPIO_WritePin(LED_ETH_TX_GPIO_Port, LED_ETH_TX_Pin, GPIO_PIN_SET);
@@ -272,7 +272,7 @@ static void ESId_flashWriteId(ESId_t id)
         HAL_Delay(1000);
     }
 
-    if(HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, ES_ID_FLASH_START_ADDR + sizeof(flash_data.flash1), (uint64_t)flash_data.flash2) != HAL_OK)
+    if(HAL_FLASH_Program(FLASH_TYPEPROGRAM_WORD, EC_ID_FLASH_START_ADDR + sizeof(flash_data.flash1), (uint64_t)flash_data.flash2) != HAL_OK)
     {
         HAL_GPIO_WritePin(LED_ETH_ERR_GPIO_Port, LED_ETH_ERR_Pin, GPIO_PIN_SET);
         HAL_GPIO_WritePin(LED_ETH_TX_GPIO_Port, LED_ETH_TX_Pin, GPIO_PIN_SET);
@@ -301,28 +301,28 @@ static ESType_bool_t ESId_isPushingBtn(void)
         if(befor1_state)
         {
             befor2_state = 1;
-            return ESTYPE_TRUE;
+            return ECTYPE_TRUE;
         }else if(!befor1_state && befor2_state){
             befor1_state = 1;
-            return ESTYPE_TRUE;
+            return ECTYPE_TRUE;
         }else if(!befor1_state && !befor2_state){
             befor1_state = 1;
-            return ESTYPE_FALSE;
+            return ECTYPE_FALSE;
         }
     }else{
         // off
         if(!befor1_state)
         {
             befor2_state = 0;
-            return ESTYPE_FALSE;
+            return ECTYPE_FALSE;
         }else if(befor1_state && !befor2_state){
             befor1_state = 0;
-            return ESTYPE_FALSE;
+            return ECTYPE_FALSE;
         }else if(befor1_state && befor2_state){
             befor1_state = 0;
-            return ESTYPE_TRUE;
+            return ECTYPE_TRUE;
         }
     }
 
-    return ESTYPE_FALSE;
+    return ECTYPE_FALSE;
 }

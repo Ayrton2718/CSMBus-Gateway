@@ -1,12 +1,12 @@
 /*
- * es_smbus.h
+ * es_csmbus.h
  *
  *  Created on: Oct 12, 2023
  *      Author: sen
  */
 
-#ifndef SRC_ETH_SMBUS_ETH_SMBUS_H_
-#define SRC_ETH_SMBUS_ETH_SMBUS_H_
+#ifndef SRC_ETH_CSMBUS_ETH_CSMBUS_H_
+#define SRC_ETH_CSMBUS_ETH_CSMBUS_H_
 
 #include "../Src/eth_csmbus/es_id.h"
 #include "../Src/eth_csmbus/es_led.h"
@@ -16,4 +16,4 @@
 
 #include "../Src/eth_csmbus/es_app_base.hpp"
 
-#endif /* SRC_ETH_SMBUS_ETH_SMBUS_H_ */
+#endif /* SRC_ETH_CSMBUS_ETH_CSMBUS_H_ */

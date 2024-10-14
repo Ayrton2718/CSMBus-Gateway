@@ -5,8 +5,8 @@
  *      Author: sen
  */
 
-#ifndef SRC_ETH_SMBUS_ES_CTRL_TYPE_H_
-#define SRC_ETH_SMBUS_ES_CTRL_TYPE_H_
+#ifndef SRC_ETH_CSMBUS_EC_CTRL_TYPE_H_
+#define SRC_ETH_CSMBUS_EC_CTRL_TYPE_H_
 
 #include "es_type.h"
 
@@ -44,4 +44,4 @@ typedef enum{
 }
 #endif
 
-#endif /* SRC_ETH_SMBUS_ES_CTRL_TYPE_H_ */
+#endif /* SRC_ETH_CSMBUS_EC_CTRL_TYPE_H_ */
