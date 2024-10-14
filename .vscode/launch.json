@@ -16,7 +16,7 @@
       "stopAtConnect": true,
       "postRemoteConnectCommands": [
         {
-          "text": "load build/debug/build/CSMBus-Gateway.elf"
+          "text": "load build/debug/build/CSMBus-GatewayF107RC.elf"
         }
       ],
       "logging": {

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 
-project("CSMBus-Gateway" C CXX ASM)
+project("CSMBus-GatewayF107RC" C CXX ASM)
 
 include(cmake/st-project.cmake)
 
