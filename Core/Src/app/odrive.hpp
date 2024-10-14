@@ -240,6 +240,7 @@ public:
             {
                 const Odrive_power_t* power_buff = static_cast<const Odrive_power_t*>(data);
                 _mot[num].power = power_buff[num];
+                _output_tim.reset();
                 set_output(num);
             }
         }

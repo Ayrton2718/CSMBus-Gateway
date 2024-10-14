@@ -72,6 +72,8 @@ private:
     } mot_t;
 
     timer::Timer    _tim;
+    timer::Timer    _output_tim;
+
     mot_t           _mot[6];
 
 public:
@@ -108,6 +110,13 @@ public:
             }
             this->ether_send(ESReg_0, send_data, sizeof(Robomas_sensor_t) * 6);
         }
+
+
+        if(10 < _output_tim.get_ms())
+        {
+            _output_tim.reset();
+            set_output();
+        }
     }
     
     void eth_callback(ESReg_t reg, const void* data, size_t len)
@@ -119,6 +128,9 @@ public:
                 const Robomas_power_t* power_buff = static_cast<const Robomas_power_t*>(data);
                 _mot[num].power = power_buff[num];
             }
+            _output_tim.reset();
+            set_output();
+
         }
 
         if(ESReg_8 <= reg && reg <= ESReg_13 && len == sizeof(Robomas_param_t))
@@ -163,8 +175,21 @@ public:
         return false;
     }
 
-    void timer_callback(void)
+    void timer_callback(void){}
+
+    void reset_callback(void)
     {
+        for(size_t i = 0; i < 6; i++)
+        {
+            mot_reset(&_mot[i]);
+        }
+
+        _tim.reset();
+        _output_tim.reset();
+    }
+
+private:
+    void set_output(void){
         ESType_bool_t is_safety_on = ESCtrl_isSafetyOn();
 
         uint8_t status_map[6] = {0, 0, 0, 0, 0, 0};
@@ -239,17 +264,6 @@ public:
         }
     }
 
-    void reset_callback(void)
-    {
-        for(size_t i = 0; i < 6; i++)
-        {
-            mot_reset(&_mot[i]);
-        }
-
-        _tim.reset();
-    }
-
-private:
     int32_t rpm_pid(mot_t* mot)
     {
         int32_t rpm_u = mot->power.rpm - mot->sens.rpm;
