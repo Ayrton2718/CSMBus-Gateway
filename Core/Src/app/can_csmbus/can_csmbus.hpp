@@ -8,7 +8,7 @@
 #ifndef SRC_APP_CAN_SMBUS_H_
 #define SRC_APP_CAN_SMBUS_H_
 
-#include "eth_smbus.h"
+#include "eth_csmbus.h"
 #include "cs_type.h"
 
 #define CAN_SMBUS_BUFFER_COUNT (16)

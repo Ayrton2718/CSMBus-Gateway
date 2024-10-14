@@ -8,6 +8,6 @@
 #ifndef INC_GW_ID_H_
 #define INC_GW_ID_H_
 
-#include "../Src/eth_smbus/es_id.h"
+#include "../Src/eth_csmbus/es_id.h"
 
 #endif /* INC_GW_ID_H_ */

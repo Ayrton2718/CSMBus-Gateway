@@ -8,7 +8,7 @@
 #ifndef SRC_ODRIVE_H_
 #define SRC_ODRIVE_H_
 
-#include "eth_smbus.h"
+#include "eth_csmbus.h"
 
 namespace smbus
 {

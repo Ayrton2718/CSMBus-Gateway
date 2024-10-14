@@ -8,7 +8,7 @@
 #ifndef SRC_ROBOMAS_H_
 #define SRC_ROBOMAS_H_
 
-#include "eth_smbus.h"
+#include "eth_csmbus.h"
 
 #define ROBOMAS_CUR_LP_COEFF (0.1)
 

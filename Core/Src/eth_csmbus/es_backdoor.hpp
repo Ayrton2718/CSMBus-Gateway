@@ -10,7 +10,7 @@
 
 #include "can.h"
 #include "es_backdoor_type.h"
-#include "../app/can_smbus/cs_type.h"
+#include "../app/can_csmbus/cs_type.h"
 
 #ifdef __cplusplus
 extern "C" {

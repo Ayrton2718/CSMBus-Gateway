@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "eth_smbus.h"
+#include "eth_csmbus.h"
 #include "cpp_main.h"
 /* USER CODE END Includes */
 

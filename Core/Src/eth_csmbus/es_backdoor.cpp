@@ -3,7 +3,7 @@
 #include "es_socket_base.hpp"
 #include "es_timer.h"
 #include "es_can.h"
-#include "../app/can_smbus/cs_type.h"
+#include "../app/can_csmbus/cs_type.h"
 
 #define ES_MSG_BUFF_COUNT   (4)
 

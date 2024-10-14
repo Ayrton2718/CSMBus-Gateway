@@ -1,9 +1,9 @@
 #include "cpp_main.h"
 
 #include "lwip.h"
-#include "eth_smbus.h"
+#include "eth_csmbus.h"
 
-#include "app/can_smbus/can_smbus.hpp"
+#include "app/can_csmbus/can_csmbus.hpp"
 #include "app/odrive.hpp"
 #include "app/robomas.hpp"
 #include <vector>
